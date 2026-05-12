@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche Révision TSSR</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #d2a8ff;
+    --accent4: #ffa657;
+    --accent5: #ff7b72;
+    --accent6: #79c0ff;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Sora', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  header h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; color: var(--accent); }
+  header span { font-size: 0.75rem; color: var(--muted); background: var(--surface2); padding: 2px 10px; border-radius: 20px; border: 1px solid var(--border); }
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; gap: 0; overflow-x: auto;
+    position: sticky; top: 57px; z-index: 99;
+  }
+  nav button {
+    background: none; border: none; color: var(--muted);
+    padding: 0.75rem 1rem; font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .content { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+  h2 { font-size: 1rem; font-weight: 700; color: var(--accent3); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  h3 { font-size: 0.85rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+  }
+  .card.green { border-color: #238636; }
+  .card.blue { border-color: #1f6feb; }
+  .card.purple { border-color: #8250df; }
+  .card.orange { border-color: #9a6700; }
+  .card.red { border-color: #da3633; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  th {
+    background: var(--surface2); color: var(--muted);
+    padding: 0.5rem 0.75rem; text-align: left;
+    border: 1px solid var(--border); font-weight: 600;
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  td { padding: 0.45rem 0.75rem; border: 1px solid var(--border); }
+  tr:hover td { background: var(--surface2); }
+  code {
+    font-family: var(--mono); font-size: 0.8rem;
+    background: var(--surface2); color: var(--accent4);
+    padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border);
+  }
+  .badge {
+    display: inline-block; padding: 1px 8px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 600; font-family: var(--mono);
+  }
+  .badge-green { background: #0d2d1a; color: var(--accent2); border: 1px solid #238636; }
+  .badge-blue { background: #0c1d40; color: var(--accent6); border: 1px solid #1f6feb; }
+  .badge-purple { background: #1e0f40; color: var(--accent3); border: 1px solid #8250df; }
+  .badge-orange { background: #2d1e0a; color: var(--accent4); border: 1px solid #9a6700; }
+  .badge-red { background: #2d0a0a; color: var(--accent5); border: 1px solid #da3633; }
+  .osi-row { display: flex; align-items: stretch; margin-bottom: 3px; border-radius: 5px; overflow: hidden; }
+  .osi-num { width: 28px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+  .osi-name { width: 140px; padding: 0.4rem 0.7rem; font-weight: 600; font-size: 0.82rem; flex-shrink: 0; }
+  .osi-role { flex: 1; padding: 0.4rem 0.7rem; font-size: 0.8rem; color: var(--muted); }
+  .osi-proto { padding: 0.4rem 0.7rem; font-family: var(--mono); font-size: 0.75rem; text-align: right; }
+  .l7 { background: #1a0d2e; }  .l7 .osi-num { background: #8250df; color: white; }
+  .l6 { background: #1a1a2e; }  .l6 .osi-num { background: #0d63e0; color: white; }
+  .l5 { background: #0d1f3a; }  .l5 .osi-num { background: #1f6feb; color: white; }
+  .l4 { background: #0d2a1a; }  .l4 .osi-num { background: #238636; color: white; }
+  .l3 { background: #1a2a0d; }  .l3 .osi-num { background: #3fb950; color: #0d1117; }
+  .l2 { background: #2a1f0d; }  .l2 .osi-num { background: #e09a00; color: #0d1117; }
+  .l1 { background: #2a0d0d; }  .l1 .osi-num { background: #da3633; color: white; }
+  .cmd-block {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.5rem;
+    font-family: var(--mono); font-size: 0.8rem;
+  }
+  .cmd-block .cmd { color: var(--accent2); }
+  .cmd-block .comment { color: var(--muted); }
+  .ip-class { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0.75rem; border-radius: 5px; margin-bottom: 4px; }
+  .cidr-table td:first-child { font-family: var(--mono); color: var(--accent4); }
+  .cidr-table td:last-child { font-family: var(--mono); color: var(--accent2); }
+  .tag { font-size: 0.7rem; background: var(--surface2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px; font-family: var(--mono); color: var(--muted); }
+  .highlight-row td { background: #0d2d1a !important; color: var(--accent2); font-weight: 600; }
+  ul { padding-left: 1.2rem; }
+  li { margin-bottom: 0.25rem; font-size: 0.85rem; }
+  li::marker { color: var(--accent); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } .osi-proto { display: none; } }
+  .formula { font-family: var(--mono); font-size: 0.85rem; background: var(--surface2); border-left: 3px solid var(--accent); padding: 0.5rem 1rem; border-radius: 0 5px 5px 0; margin: 0.5rem 0; color: var(--accent6); }
+  .sep { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+  .label { font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .big { font-size: 1.5rem; font-weight: 700; font-family: var(--mono); color: var(--accent); }
+  .port-crit td:first-child { color: var(--accent5); font-weight: 700; font-family: var(--mono); }
+  .port-std td:first-child { color: var(--accent4); font-family: var(--mono); }
+  .section-title { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ TSSR — Fiche Révision</h1>
+  <span>Technicien Supérieur Systèmes et Réseaux</span>
+</header>
+
+<nav id="nav">
+  <button class="active" onclick="show('osi')">OSI / TCP-IP</button>
+  <button onclick="show('ports')">Ports & Protocoles</button>
+  <button onclick="show('ip')">Adressage IP</button>
+  <button onclick="show('routage')">Routage & VLAN</button>
+  <button onclick="show('ad')">Active Directory</button>
+  <button onclick="show('windows')">Windows Server</button>
+  <button onclick="show('linux')">Linux</button>
+  <button onclick="show('secu')">Sécurité</button>
+  <button onclick="show('virt')">Virtualisation</button>
+  <button onclick="show('recap')">Récap mémo</button>
+</nav>
+
+<div class="content">
+
+<!-- ====== OSI ====== -->
+<div class="section active" id="osi">
+  <div class="section-title"><h2>Modèles OSI & TCP/IP</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Modèle OSI — 7 couches</h3>
+      <div style="margin-top:0.75rem">
+        <div class="osi-row l7"><div class="osi-num">7</div><div class="osi-name">Application</div><div class="osi-role">Interface avec l'utilisateur</div><div class="osi-proto">HTTP FTP SMTP DNS SNMP</div></div>
+        <div class="osi-row l6"><div class="osi-num">6</div><div class="osi-name">Présentation</div><div class="osi-role">Encodage, chiffrement, compression</div><div class="osi-proto">SSL/TLS JPEG ASCII</div></div>
+        <div class="osi-row l5"><div class="osi-num">5</div><div class="osi-name">Session</div><div class="osi-role">Ouverture/fermeture de sessions</div><div class="osi-proto">NetBIOS RPC</div></div>
+        <div class="osi-row l4"><div class="osi-num">4</div><div class="osi-name">Transport</div><div class="osi-role">Segmentation, fiabilité, ports</div><div class="osi-proto">TCP UDP</div></div>
+        <div class="osi-row l3"><div class="osi-num">3</div><div class="osi-name">Réseau</div><div class="osi-role">Adressage IP, routage</div><div class="osi-proto">IP ICMP ARP OSPF BGP</div></div>
+        <div class="osi-row l2"><div class="osi-num">2</div><div class="osi-name">Liaison</div><div class="osi-role">Adresse MAC, trames, accès medium</div><div class="osi-proto">Ethernet 802.3 802.11</div></div>
+        <div class="osi-row l1"><div class="osi-num">1</div><div class="osi-name">Physique</div><div class="osi-role">Signal électrique/optique/radio</div><div class="osi-proto">RJ45 Fibre USB</div></div>
+      </div>
+      <div style="margin-top:0.75rem; font-size:0.78rem; color:var(--muted)">Mnémotechnique ↑ : <span style="color:var(--accent3)">«&nbsp;Physique Liaison Réseau Transport Session Présentation Application&nbsp;»</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Modèle TCP/IP — 4 couches</h3>
+      <table style="margin-top:0.75rem">
+        <tr><th>Couche TCP/IP</th><th>Correspondance OSI</th><th>Protocoles</th></tr>
+        <tr><td style="color:var(--accent3)">Application</td><td>5 + 6 + 7</td><td><code>HTTP DNS SMTP FTP</code></td></tr>
+        <tr><td style="color:var(--accent2)">Transport</td><td>4</td><td><code>TCP UDP</code></td></tr>
+        <tr><td style="color:var(--accent4)">Internet</td><td>3</td><td><code>IP ICMP ARP</code></td></tr>
+        <tr><td style="color:var(--accent5)">Accès réseau</td><td>1 + 2</td><td><code>Ethernet Wi-Fi</code></td></tr>
+      </table>
+
+      <hr class="sep">
+      <h3>TCP vs UDP</h3>
+      <table>
+        <tr><th></th><th>TCP</th><th>UDP</th></tr>
+        <tr><td>Connexion</td><td>✅ Orienté connexion (3-way handshake)</td><td>❌ Sans connexion</td></tr>
+        <tr><td>Fiabilité</td><td>✅ ACK, retransmission</td><td>❌ Pas de garantie</td></tr>
+        <tr><td>Ordre</td><td>✅ Séquencé</td><td>❌ Non garanti</td></tr>
+        <tr><td>Vitesse</td><td>Plus lent</td><td>Plus rapide</td></tr>
+        <tr><td>Usage</td><td>HTTP, FTP, SMTP</td><td>DNS, DHCP, VoIP</td></tr>
+      </table>
+      <div class="formula">3-way handshake : SYN → SYN-ACK → ACK</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Unités de données (PDU)</h3>
+    <table>
+      <tr><th>Couche</th><th>PDU</th><th>En-tête contient</th></tr>
+      <tr><td>7-5 Application</td><td><span class="badge badge-purple">Message / Données</span></td><td>Données applicatives</td></tr>
+      <tr><td>4 Transport</td><td><span class="badge badge-green">Segment (TCP) / Datagramme (UDP)</span></td><td>Port source/dest, numéro de séquence</td></tr>
+      <tr><td>3 Réseau</td><td><span class="badge badge-blue">Paquet</span></td><td>IP source/dest, TTL</td></tr>
+      <tr><td>2 Liaison</td><td><span class="badge badge-orange">Trame</span></td><td>MAC source/dest, FCS</td></tr>
+      <tr><td>1 Physique</td><td><span class="badge badge-red">Bits</span></td><td>Signal électrique/optique</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ====== PORTS ====== -->
+<div class="section" id="ports">
+  <div class="section-title"><h2>Ports & Protocoles</h2></div>
+  <div class="grid">
+    <div class="card">
+      <h3>Ports à connaître absolument</h3>
+      <table class="port-crit" style="margin-top:0.5rem">
+        <tr><th>Port</th><th>Protocole</th><th>Transport</th><th>Description</th></tr>
+        <tr><td>20/21</td><td>FTP</td><td>TCP</td><td>Transfert fichiers (20=data, 21=cmd)</td></tr>
+        <tr><td>22</td><td>SSH</td><td>TCP</td><td>Shell sécurisé</td></tr>
+        <tr><td>23</td><td>Telnet</td><td>TCP</td><td>Shell non sécurisé</td></tr>
+        <tr><td>25</td><td>SMTP</td><td>TCP</td><td>Envoi e-mail</td></tr>
+        <tr><td>53</td><td>DNS</td><td>TCP+UDP</td><td>Résolution de noms</td></tr>
+        <tr><td>67/68</td><td>DHCP</td><td>UDP</td><td>Serveur (67) / Client (68)</td></tr>
+        <tr><td>69</td><td>TFTP</td><td>UDP</td><td>Transfert trivial</td></tr>
+        <tr><td>80</td><td>HTTP</td><td>TCP</td><td>Web non chiffré</td></tr>
+        <tr><td>110</td><td>POP3</td><td>TCP</td><td>Réception e-mail (ancien)</td></tr>
+        <tr><td>119</td><td>NNTP</td><td>TCP</td><td>Usenet newsgroups</td></tr>
+        <tr><td>123</td><td>NTP</td><td>UDP</td><td>Synchronisation temps</td></tr>
+        <tr><td>137-139</td><td>NetBIOS</td><td>TCP+UDP</td><td>Partage Windows (ancien)</td></tr>
+        <tr><td>143</td><td>IMAP</td><td>TCP</td><td>Réception e-mail</td></tr>
+        <tr><td>161/162</td><td>SNMP</td><td>UDP</td><td>Supervision réseau</td></tr>
+        <tr><td>389</td><td>LDAP</td><td>TCP</td><td>Annuaire</td></tr>
+        <tr><td>443</td><td>HTTPS</td><td>TCP</td><td>Web chiffré (TLS)</td></tr>
+        <tr><td>445</td><td>SMB</td><td>TCP</td><td>Partage fichiers Windows</td></tr>
+        <tr><td>465</td><td>SMTPS</td><td>TCP</td><td>SMTP sécurisé</td></tr>
+        <tr><td>514</td><td>Syslog</td><td>UDP</td><td>Journalisation réseau</td></tr>
+        <tr><td>587</td><td>SMTP/TLS</td><td>TCP</td><td>Envoi e-mail sécurisé</td></tr>
+        <tr><td>636</td><td>LDAPS</td><td>TCP</td><td>LDAP sécurisé</td></tr>
+        <tr><td>993</td><td>IMAPS</td><td>TCP</td><td>IMAP sécurisé</td></tr>
+        <tr><td>995</td><td>POP3S</td><td>TCP</td><td>POP3 sécurisé</td></tr>
+        <tr><td>1433</td><td>MSSQL</td><td>TCP</td><td>SQL Server</td></tr>
+        <tr><td>1723</td><td>PPTP</td><td>TCP</td><td>VPN PPTP</td></tr>
+        <tr><td>3306</td><td>MySQL</td><td>TCP</td><td>Base de données MySQL</td></tr>
+        <tr><td>3389</td><td>RDP</td><td>TCP</td><td>Bureau à distance Windows</td></tr>
+        <tr><td>5900</td><td>VNC</td><td>TCP</td><td>Bureau à distance</td></tr>
+        <tr><td>8080</td><td>HTTP alt</td><td>TCP</td><td>Proxy / serveur alternatif</td></tr>
+      </table>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Plages de ports</h3>
+        <table style="margin-top:0.5rem">
+          <tr><th>Plage</th><th>Type</th></tr>
+          <tr><td><code>0 – 1023</code></td><td>Ports bien connus (Well-known)</td></tr>
+          <tr><td><code>1024 – 49151</code></td><td>Ports enregistrés (Registered)</td></tr>
+          <tr><td><code>49152 – 65535</code></td><td>Ports dynamiques / éphémères</td></tr>
+        </table>
+      </div>
+
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Protocoles de messagerie</h3>
+        <table style="margin-top:0.5rem">
+          <tr><th>Protocole</th><th>Rôle</th><th>Port</th></tr>
+          <tr><td>SMTP</td><td>Envoi</td><td>25 / 587</td></tr>
+          <tr><td>POP3</td><td>Réception (télécharge &amp; supprime)</td><td>110 / 995</td></tr>
+          <tr><td>IMAP</td><td>Réception (synchronise)</td><td>143 / 993</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Protocoles de sécurité</h3>
+        <ul style="margin-top:0.5rem">
+          <li><strong style="color:var(--accent2)">SSL</strong> → obsolète, remplacé par TLS</li>
+          <li><strong style="color:var(--accent2)">TLS 1.2 / 1.3</strong> → standard actuel (HTTPS, SMTPS…)</li>
+          <li><strong style="color:var(--accent2)">IPSec</strong> → chiffrement couche 3 (AH + ESP)</li>
+          <li><strong style="color:var(--accent2)">SSH</strong> → tunnel chiffré, remplacement de Telnet</li>
+          <li><strong style="color:var(--accent2)">HTTPS</strong> → HTTP sur TLS (port 443)</li>
+          <li><strong style="color:var(--accent2)">SFTP/SCP</strong> → FTP/copie sécurisés via SSH</li>
+          <li><strong style="color:var(--accent2)">Kerberos</strong> → authentification réseau Windows (port 88)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== IP ====== -->
+<div class="section" id="ip">
+  <div class="section-title"><h2>Adressage IP</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Classes IPv4</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Classe</th><th>1er octet</th><th>Masque défaut</th><th>Plage publique</th><th>Usage</th></tr>
+        <tr><td><span class="badge badge-blue">A</span></td><td>1–126</td><td>/8 (255.0.0.0)</td><td>1.0.0.0–126.255.255.255</td><td>Très grands réseaux</td></tr>
+        <tr><td><span class="badge badge-green">B</span></td><td>128–191</td><td>/16 (255.255.0.0)</td><td>128.0.0.0–191.255.255.255</td><td>Moyens réseaux</td></tr>
+        <tr><td><span class="badge badge-orange">C</span></td><td>192–223</td><td>/24 (255.255.255.0)</td><td>192.0.0.0–223.255.255.255</td><td>Petits réseaux</td></tr>
+        <tr><td><span class="badge badge-red">D</span></td><td>224–239</td><td>N/A</td><td>Multicast</td><td>Diffusion groupe</td></tr>
+        <tr><td><span class="badge" style="background:#2a2a2a;color:var(--muted);border:1px solid var(--border)">E</span></td><td>240–255</td><td>N/A</td><td>Réservé</td><td>Expérimental</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Adresses privées RFC 1918</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Plage</th><th>CIDR</th><th>Nb d'adresses</th></tr>
+        <tr class="highlight-row"><td>10.0.0.0 – 10.255.255.255</td><td>/8</td><td>~16 millions</td></tr>
+        <tr class="highlight-row"><td>172.16.0.0 – 172.31.255.255</td><td>/12</td><td>~1 million</td></tr>
+        <tr class="highlight-row"><td>192.168.0.0 – 192.168.255.255</td><td>/16</td><td>65 536</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Adresses spéciales</h3>
+      <table>
+        <tr><td><code>127.0.0.1</code></td><td>Loopback (localhost)</td></tr>
+        <tr><td><code>169.254.x.x</code></td><td>APIPA (pas de DHCP)</td></tr>
+        <tr><td><code>255.255.255.255</code></td><td>Broadcast limité</td></tr>
+        <tr><td><code>0.0.0.0</code></td><td>Réseau par défaut / indéfini</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Table CIDR — Masques de sous-réseau</h3>
+      <table class="cidr-table" style="margin-top:0.5rem">
+        <tr><th>CIDR</th><th>Masque</th><th>Hôtes utilisables</th><th>Nb de sous-réseaux (/24)</th></tr>
+        <tr><td>/8</td><td>255.0.0.0</td><td>16 777 214</td><td>1</td></tr>
+        <tr><td>/16</td><td>255.255.0.0</td><td>65 534</td><td>256</td></tr>
+        <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>1</td></tr>
+        <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>2</td></tr>
+        <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>4</td></tr>
+        <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>8</td></tr>
+        <tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>16</td></tr>
+        <tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>32</td></tr>
+        <tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>64</td></tr>
+        <tr><td>/31</td><td>255.255.255.254</td><td>0 (point à point)</td><td>—</td></tr>
+        <tr><td>/32</td><td>255.255.255.255</td><td>1 hôte (loopback)</td><td>—</td></tr>
+      </table>
+      <div class="formula">Hôtes utilisables = 2^(32−CIDR) − 2</div>
+      <div class="formula">Nb sous-réseaux = 2^n (n = bits empruntés)</div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>IPv6 — L'essentiel</h3>
+        <ul style="margin-top:0.5rem">
+          <li>Longueur : <strong style="color:var(--accent)">128 bits</strong> (vs 32 pour IPv4)</li>
+          <li>Notation : 8 groupes de 4 hex séparés par <code>:</code></li>
+          <li>Abréviation : zéros consécutifs → <code>::</code> (une seule fois)</li>
+        </ul>
+        <table style="margin-top:0.75rem">
+          <tr><th>Préfixe</th><th>Type</th><th>Équivalent IPv4</th></tr>
+          <tr><td><code>::1/128</code></td><td>Loopback</td><td>127.0.0.1</td></tr>
+          <tr><td><code>FE80::/10</code></td><td>Link-local</td><td>169.254.x.x</td></tr>
+          <tr><td><code>FC00::/7</code></td><td>Unique local</td><td>RFC 1918</td></tr>
+          <tr><td><code>2000::/3</code></td><td>Global unicast</td><td>Publique</td></tr>
+          <tr><td><code>FF00::/8</code></td><td>Multicast</td><td>224.0.0.0/4</td></tr>
+        </table>
+        <div class="formula">Pas de broadcast en IPv6 → remplacé par multicast</div>
+      </div>
+
+      <div class="card">
+        <h3>Calcul réseau — Méthode rapide</h3>
+        <ol style="margin-top:0.5rem; padding-left:1.2rem; font-size:0.85rem">
+          <li>Convertir le masque en CIDR</li>
+          <li>Identifier l'octet "intéressant" (non 0 ni 255)</li>
+          <li>Calculer le pas = <code>256 − valeur_octet</code></li>
+          <li>Adresse réseau = multiple du pas inférieur à l'octet hôte</li>
+          <li>Broadcast = adresse réseau suivante − 1</li>
+        </ol>
+        <div class="formula">Ex: 192.168.10.33/27 → pas=32 → réseau=.32 → broadcast=.63</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== ROUTAGE ====== -->
+<div class="section" id="routage">
+  <div class="section-title"><h2>Routage & VLAN</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Protocoles de routage</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Protocole</th><th>Type</th><th>Algorithme</th><th>Métrique</th><th>Admin dist.</th></tr>
+        <tr><td><code>RIP v2</code></td><td>IGP / Distance vector</td><td>Bellman-Ford</td><td>Sauts (max 15)</td><td>120</td></tr>
+        <tr><td><code>OSPF</code></td><td>IGP / Link state</td><td>Dijkstra (SPF)</td><td>Coût (bande passante)</td><td>110</td></tr>
+        <tr><td><code>EIGRP</code></td><td>IGP / Hybride (Cisco)</td><td>DUAL</td><td>Bande passante + délai</td><td>90 (interne)</td></tr>
+        <tr><td><code>BGP</code></td><td>EGP (Internet)</td><td>Path vector</td><td>Attributs AS</td><td>20 (eBGP)</td></tr>
+        <tr><td><code>Statique</code></td><td>Manuel</td><td>—</td><td>—</td><td>1</td></tr>
+        <tr><td><code>Directement connecté</code></td><td>—</td><td>—</td><td>—</td><td>0</td></tr>
+      </table>
+      <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--muted)">
+        ↓ Distance administrative = priorité (plus petit = plus prioritaire)
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>VLAN</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:var(--accent2)">VLAN</strong> = Virtual LAN, segmentation logique d'un switch</li>
+        <li><strong style="color:var(--accent2)">Trunk</strong> = port qui transporte plusieurs VLANs (étiquetage 802.1Q)</li>
+        <li><strong style="color:var(--accent2)">Access</strong> = port appartenant à un seul VLAN</li>
+        <li><strong style="color:var(--accent2)">Native VLAN</strong> = VLAN par défaut non étiqueté sur trunk (VLAN 1)</li>
+        <li><strong style="color:var(--accent2)">Inter-VLAN routing</strong> = routeur ou switch L3</li>
+        <li><strong style="color:var(--accent2)">802.1Q</strong> = standard d'encapsulation VLAN (tag 4 octets)</li>
+      </ul>
+      <hr class="sep">
+      <h3>Spanning Tree Protocol (STP)</h3>
+      <ul>
+        <li><strong>But</strong> : éviter les boucles sur les réseaux commutés</li>
+        <li><strong>Root bridge</strong> : switch élu (BID le plus bas)</li>
+        <li><strong>États des ports</strong> : Blocking → Listening → Learning → Forwarding</li>
+        <li><strong>RSTP</strong> (802.1w) = version rapide de STP</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Équipements réseau</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Équipement</th><th>Couche OSI</th><th>Rôle</th></tr>
+        <tr><td>Hub</td><td>L1</td><td>Répète le signal sur tous les ports</td></tr>
+        <tr><td>Switch</td><td>L2</td><td>Commutation par adresse MAC (table CAM)</td></tr>
+        <tr><td>Switch L3</td><td>L3</td><td>Switch + routage inter-VLAN</td></tr>
+        <tr><td>Routeur</td><td>L3</td><td>Routage IP entre réseaux différents</td></tr>
+        <tr><td>Pare-feu</td><td>L3-L7</td><td>Filtrage de trafic (ACL, stateful)</td></tr>
+        <tr><td>Proxy</td><td>L7</td><td>Intermédiaire applicatif (cache, filtrage)</td></tr>
+        <tr><td>WAP</td><td>L2</td><td>Point d'accès Wi-Fi (802.11)</td></tr>
+        <tr><td>Load balancer</td><td>L4-L7</td><td>Répartition de charge</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>NAT / PAT</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><span class="badge badge-blue">NAT statique</span></td><td>1 IP privée ↔ 1 IP publique</td></tr>
+        <tr><td><span class="badge badge-green">NAT dynamique</span></td><td>Pool d'IPs privées ↔ Pool d'IPs publiques</td></tr>
+        <tr><td><span class="badge badge-orange">PAT / NAT overload</span></td><td>N IPs privées → 1 IP publique (via ports)</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>DHCP — Processus DORA</h3>
+      <div class="formula">Discover → Offer → Request → Acknowledgement</div>
+      <ul style="margin-top:0.5rem">
+        <li><strong>Discover</strong> : client broadcast (cherche serveur DHCP)</li>
+        <li><strong>Offer</strong> : serveur propose une IP</li>
+        <li><strong>Request</strong> : client accepte l'offre</li>
+        <li><strong>Ack</strong> : serveur confirme le bail</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====== AD ====== -->
+<div class="section" id="ad">
+  <div class="section-title"><h2>Active Directory</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Concepts fondamentaux</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Terme</th><th>Définition</th></tr>
+        <tr><td><code>Domaine</code></td><td>Unité d'administration AD (ex: entreprise.local)</td></tr>
+        <tr><td><code>Forêt</code></td><td>Ensemble de domaines AD partageant un schéma</td></tr>
+        <tr><td><code>Arbre</code></td><td>Ensemble de domaines avec même espace de noms</td></tr>
+        <tr><td><code>OU</code></td><td>Unité d'organisation = conteneur logique d'objets</td></tr>
+        <tr><td><code>DC</code></td><td>Domain Controller = serveur qui héberge AD DS</td></tr>
+        <tr><td><code>GPO</code></td><td>Group Policy Object = stratégie de groupe</td></tr>
+        <tr><td><code>LDAP</code></td><td>Protocole d'accès à l'annuaire (port 389/636)</td></tr>
+        <tr><td><code>Kerberos</code></td><td>Protocole d'authentification AD (port 88)</td></tr>
+        <tr><td><code>SID</code></td><td>Security Identifier = identifiant unique d'un objet</td></tr>
+        <tr><td><code>UPN</code></td><td>User Principal Name = user@domaine.com</td></tr>
+        <tr><td><code>SAM</code></td><td>Security Account Manager (domaine\user)</td></tr>
+        <tr><td><code>FSMO</code></td><td>Flexible Single Master Operations (rôles maîtres)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Rôles FSMO (5 à connaître)</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Rôle</th><th>Étendue</th><th>Rôle</th></tr>
+        <tr><td><code>Schema Master</code></td><td>Forêt</td><td>Modifie le schéma AD</td></tr>
+        <tr><td><code>Domain Naming Master</code></td><td>Forêt</td><td>Ajoute/supprime domaines</td></tr>
+        <tr><td><code>PDC Emulator</code></td><td>Domaine</td><td>Synchro temps, mots de passe, GPO</td></tr>
+        <tr><td><code>RID Master</code></td><td>Domaine</td><td>Distribue les blocs de RID</td></tr>
+        <tr><td><code>Infrastructure Master</code></td><td>Domaine</td><td>Maintient références inter-domaines</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Types de groupes AD</h3>
+      <table>
+        <tr><th>Étendue</th><th>Membres</th><th>Droits</th></tr>
+        <tr><td><span class="badge badge-blue">Global</span></td><td>Même domaine</td><td>Tout domaine de la forêt</td></tr>
+        <tr><td><span class="badge badge-purple">Universal</span></td><td>Toute la forêt</td><td>Toute la forêt</td></tr>
+        <tr><td><span class="badge badge-orange">Domain Local</span></td><td>Toute la forêt</td><td>Domaine local seulement</td></tr>
+      </table>
+      <div style="margin-top:0.5rem; font-size:0.78rem; color:var(--muted)">Bonnes pratiques AGDLP : Accounts → Global → Domain Local → Permissions</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>GPO — Group Policy</h3>
+      <ul style="margin-top:0.5rem">
+        <li>Les GPO s'appliquent dans l'ordre : <strong style="color:var(--accent)">L → S → D → OU</strong> (Local → Site → Domaine → OU)</li>
+        <li>La GPO la plus proche (OU) est la dernière appliquée = prioritaire</li>
+        <li><strong>Bloc héritage</strong> : empêche l'héritage des GPO parentes</li>
+        <li><strong>Enforced (No Override)</strong> : force l'application même si bloc héritage</li>
+        <li><strong>Loopback processing</strong> : applique GPO de l'OU ordinateur à l'utilisateur</li>
+        <li>Commande de forçage : <code>gpupdate /force</code></li>
+        <li>Résultat : <code>gpresult /h rapport.html</code></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>DNS — Enregistrements</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Rôle</th></tr>
+        <tr><td><code>A</code></td><td>Nom → IPv4</td></tr>
+        <tr><td><code>AAAA</code></td><td>Nom → IPv6</td></tr>
+        <tr><td><code>CNAME</code></td><td>Alias → autre nom</td></tr>
+        <tr><td><code>MX</code></td><td>Serveur de messagerie du domaine</td></tr>
+        <tr><td><code>PTR</code></td><td>IPv4/IPv6 → Nom (DNS inversé)</td></tr>
+        <tr><td><code>NS</code></td><td>Serveur de noms faisant autorité</td></tr>
+        <tr><td><code>SOA</code></td><td>Infos de zone (serial, TTL…)</td></tr>
+        <tr><td><code>SRV</code></td><td>Services (Kerberos, LDAP…)</td></tr>
+        <tr><td><code>TXT</code></td><td>Texte libre (SPF, DKIM…)</td></tr>
+      </table>
+      <div class="formula">Zone directe : Nom → IP | Zone inverse : IP → Nom</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== WINDOWS ====== -->
+<div class="section" id="windows">
+  <div class="section-title"><h2>Windows Server — Commandes essentielles</h2></div>
+
+  <div class="two-col">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Réseau</h3>
+        <div class="cmd-block"><span class="cmd">ipconfig /all</span> <span class="comment">— config IP complète</span></div>
+        <div class="cmd-block"><span class="cmd">ipconfig /release</span> <span class="comment">— libère bail DHCP</span></div>
+        <div class="cmd-block"><span class="cmd">ipconfig /renew</span> <span class="comment">— renouvelle bail DHCP</span></div>
+        <div class="cmd-block"><span class="cmd">ipconfig /flushdns</span> <span class="comment">— vide cache DNS</span></div>
+        <div class="cmd-block"><span class="cmd">ping &lt;IP&gt;</span> <span class="comment">— test connectivité ICMP</span></div>
+        <div class="cmd-block"><span class="cmd">tracert &lt;IP&gt;</span> <span class="comment">— trace la route</span></div>
+        <div class="cmd-block"><span class="cmd">nslookup &lt;nom&gt;</span> <span class="comment">— résolution DNS</span></div>
+        <div class="cmd-block"><span class="cmd">netstat -an</span> <span class="comment">— connexions actives + ports</span></div>
+        <div class="cmd-block"><span class="cmd">route print</span> <span class="comment">— table de routage</span></div>
+        <div class="cmd-block"><span class="cmd">arp -a</span> <span class="comment">— cache ARP</span></div>
+        <div class="cmd-block"><span class="cmd">netsh interface ip show config</span> <span class="comment">— config réseau</span></div>
+        <div class="cmd-block"><span class="cmd">netsh wlan show profiles</span> <span class="comment">— profils Wi-Fi</span></div>
+      </div>
+
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Active Directory (PowerShell)</h3>
+        <div class="cmd-block"><span class="cmd">Get-ADUser -Identity jdupont</span></div>
+        <div class="cmd-block"><span class="cmd">New-ADUser -Name "Jean Dupont" -SamAccountName jdupont</span></div>
+        <div class="cmd-block"><span class="cmd">Set-ADAccountPassword -Identity jdupont</span></div>
+        <div class="cmd-block"><span class="cmd">Enable-ADAccount -Identity jdupont</span></div>
+        <div class="cmd-block"><span class="cmd">Add-ADGroupMember -Identity "GRP_IT" -Members jdupont</span></div>
+        <div class="cmd-block"><span class="cmd">Get-ADComputer -Filter *</span></div>
+        <div class="cmd-block"><span class="cmd">Get-ADDomain</span></div>
+        <div class="cmd-block"><span class="cmd">netdom join &lt;PC&gt; /domain:&lt;dom&gt;</span> <span class="comment">— jonction domaine</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Système & Gestion</h3>
+        <div class="cmd-block"><span class="cmd">systeminfo</span> <span class="comment">— infos système complètes</span></div>
+        <div class="cmd-block"><span class="cmd">net user &lt;login&gt; /domain</span> <span class="comment">— infos compte AD</span></div>
+        <div class="cmd-block"><span class="cmd">net localgroup administrators</span> <span class="comment">— admins locaux</span></div>
+        <div class="cmd-block"><span class="cmd">sc query &lt;service&gt;</span> <span class="comment">— état d'un service</span></div>
+        <div class="cmd-block"><span class="cmd">net start / net stop &lt;svc&gt;</span> <span class="comment">— démarrer/stopper service</span></div>
+        <div class="cmd-block"><span class="cmd">sfc /scannow</span> <span class="comment">— vérification fichiers système</span></div>
+        <div class="cmd-block"><span class="cmd">chkdsk C: /f /r</span> <span class="comment">— vérifier disque</span></div>
+        <div class="cmd-block"><span class="cmd">tasklist / taskkill /PID &lt;n&gt;</span></div>
+        <div class="cmd-block"><span class="cmd">wmic cpu get caption</span> <span class="comment">— infos processeur</span></div>
+        <div class="cmd-block"><span class="cmd">eventvwr.msc</span> <span class="comment">— observateur d'événements</span></div>
+        <div class="cmd-block"><span class="cmd">compmgmt.msc</span> <span class="comment">— gestion de l'ordinateur</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Rôles Windows Server (ADDS)</h3>
+        <table style="margin-top:0.5rem">
+          <tr><th>Acronyme</th><th>Rôle</th></tr>
+          <tr><td><code>AD DS</code></td><td>Active Directory Domain Services</td></tr>
+          <tr><td><code>AD CS</code></td><td>Certificate Services (PKI)</td></tr>
+          <tr><td><code>AD FS</code></td><td>Federation Services (SSO)</td></tr>
+          <tr><td><code>AD RMS</code></td><td>Rights Management Services</td></tr>
+          <tr><td><code>DNS</code></td><td>Domain Name System</td></tr>
+          <tr><td><code>DHCP</code></td><td>Dynamic Host Configuration Protocol</td></tr>
+          <tr><td><code>IIS</code></td><td>Serveur Web Microsoft</td></tr>
+          <tr><td><code>WDS</code></td><td>Windows Deployment Services</td></tr>
+          <tr><td><code>WSUS</code></td><td>Windows Server Update Services</td></tr>
+          <tr><td><code>RDS</code></td><td>Remote Desktop Services</td></tr>
+          <tr><td><code>HV</code></td><td>Hyper-V (virtualisation)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== LINUX ====== -->
+<div class="section" id="linux">
+  <div class="section-title"><h2>Linux — Commandes essentielles</h2></div>
+
+  <div class="two-col">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Réseau</h3>
+        <div class="cmd-block"><span class="cmd">ip addr show</span> <span class="comment">— adresses IP des interfaces</span></div>
+        <div class="cmd-block"><span class="cmd">ip route show</span> <span class="comment">— table de routage</span></div>
+        <div class="cmd-block"><span class="cmd">ip link set eth0 up/down</span></div>
+        <div class="cmd-block"><span class="cmd">ss -tulnp</span> <span class="comment">— ports ouverts (remplace netstat)</span></div>
+        <div class="cmd-block"><span class="cmd">netstat -tulnp</span> <span class="comment">— ports ouverts (ancien)</span></div>
+        <div class="cmd-block"><span class="cmd">ping / traceroute / mtr</span></div>
+        <div class="cmd-block"><span class="cmd">nslookup / dig &lt;nom&gt;</span> <span class="comment">— résolution DNS</span></div>
+        <div class="cmd-block"><span class="cmd">curl / wget &lt;URL&gt;</span> <span class="comment">— requête HTTP</span></div>
+        <div class="cmd-block"><span class="cmd">ssh user@host</span> <span class="comment">— connexion SSH</span></div>
+        <div class="cmd-block"><span class="cmd">scp fichier user@host:/dest</span> <span class="comment">— copie SSH</span></div>
+        <div class="cmd-block"><span class="cmd">iptables -L -n -v</span> <span class="comment">— règles pare-feu</span></div>
+        <div class="cmd-block"><span class="cmd">ufw allow 22/tcp</span> <span class="comment">— pare-feu simplifié Ubuntu</span></div>
+      </div>
+
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Fichiers de config réseau</h3>
+        <div class="cmd-block"><span class="comment"># Config réseau</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/network/interfaces</span> <span class="comment">— Debian/Ubuntu</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/sysconfig/network-scripts/</span> <span class="comment">— RHEL/CentOS</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/netplan/*.yaml</span> <span class="comment">— Ubuntu 18+</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/resolv.conf</span> <span class="comment">— DNS client</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/hosts</span> <span class="comment">— résolution locale</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/hostname</span> <span class="comment">— nom de la machine</span></div>
+        <div class="cmd-block"><span class="cmd">/etc/ssh/sshd_config</span> <span class="comment">— config serveur SSH</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>Système & Fichiers</h3>
+        <div class="cmd-block"><span class="cmd">ls -la</span> <span class="comment">— liste avec permissions</span></div>
+        <div class="cmd-block"><span class="cmd">chmod 755 fichier</span> <span class="comment">— modifier permissions</span></div>
+        <div class="cmd-block"><span class="cmd">chown user:group fichier</span> <span class="comment">— changer propriétaire</span></div>
+        <div class="cmd-block"><span class="cmd">find / -name "*.log" -type f</span></div>
+        <div class="cmd-block"><span class="cmd">grep -r "texte" /var/log/</span></div>
+        <div class="cmd-block"><span class="cmd">tail -f /var/log/syslog</span> <span class="comment">— log en temps réel</span></div>
+        <div class="cmd-block"><span class="cmd">df -h</span> <span class="comment">— espace disque</span></div>
+        <div class="cmd-block"><span class="cmd">du -sh /dossier</span> <span class="comment">— taille dossier</span></div>
+        <div class="cmd-block"><span class="cmd">free -h</span> <span class="comment">— mémoire RAM</span></div>
+        <div class="cmd-block"><span class="cmd">top / htop</span> <span class="comment">— processus en cours</span></div>
+        <div class="cmd-block"><span class="cmd">ps aux</span> <span class="comment">— liste des processus</span></div>
+        <div class="cmd-block"><span class="cmd">kill -9 &lt;PID&gt;</span> <span class="comment">— tuer un processus</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Droits — chmod octal</h3>
+        <table style="margin-top:0.5rem">
+          <tr><th>Valeur</th><th>Binaire</th><th>Droits</th></tr>
+          <tr><td><code>7</code></td><td>111</td><td>rwx (lecture + écriture + exéc)</td></tr>
+          <tr><td><code>6</code></td><td>110</td><td>rw- (lecture + écriture)</td></tr>
+          <tr><td><code>5</code></td><td>101</td><td>r-x (lecture + exéc)</td></tr>
+          <tr><td><code>4</code></td><td>100</td><td>r-- (lecture seule)</td></tr>
+          <tr><td><code>0</code></td><td>000</td><td>--- (aucun droit)</td></tr>
+        </table>
+        <div class="formula">chmod 755 = rwxr-xr-x | chmod 644 = rw-r--r--</div>
+        <div style="margin-top:0.5rem; font-size:0.8rem; color:var(--muted)">Ordre : Propriétaire | Groupe | Autres</div>
+        <hr class="sep">
+        <h3>Services (systemd)</h3>
+        <div class="cmd-block"><span class="cmd">systemctl start/stop/restart &lt;svc&gt;</span></div>
+        <div class="cmd-block"><span class="cmd">systemctl enable/disable &lt;svc&gt;</span> <span class="comment">— démarrage auto</span></div>
+        <div class="cmd-block"><span class="cmd">systemctl status &lt;svc&gt;</span></div>
+        <div class="cmd-block"><span class="cmd">journalctl -u &lt;svc&gt; -f</span> <span class="comment">— logs service</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SECU ====== -->
+<div class="section" id="secu">
+  <div class="section-title"><h2>Sécurité</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Types d'attaques à connaître</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Attaque</th><th>Description</th></tr>
+        <tr><td><span class="badge badge-red">DoS / DDoS</span></td><td>Déni de service (inondation de requêtes)</td></tr>
+        <tr><td><span class="badge badge-red">Man in the Middle</span></td><td>Interception de communications</td></tr>
+        <tr><td><span class="badge badge-red">ARP Spoofing</span></td><td>Empoisonnement cache ARP → MITM</td></tr>
+        <tr><td><span class="badge badge-red">DNS Poisoning</span></td><td>Redirection via faux enregistrements DNS</td></tr>
+        <tr><td><span class="badge badge-red">Phishing</span></td><td>Usurpation d'identité par e-mail</td></tr>
+        <tr><td><span class="badge badge-red">Ransomware</span></td><td>Chiffrement des données + rançon</td></tr>
+        <tr><td><span class="badge badge-red">SQL Injection</span></td><td>Injection de code SQL dans formulaires</td></tr>
+        <tr><td><span class="badge badge-red">XSS</span></td><td>Injection script dans pages web</td></tr>
+        <tr><td><span class="badge badge-red">Brute Force</span></td><td>Test de toutes les combinaisons de mdp</td></tr>
+        <tr><td><span class="badge badge-red">Social Engineering</span></td><td>Manipulation humaine pour obtenir accès</td></tr>
+        <tr><td><span class="badge badge-red">Rootkit</span></td><td>Malware qui se cache dans le système</td></tr>
+        <tr><td><span class="badge badge-red">Keylogger</span></td><td>Enregistre les frappes clavier</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Chiffrement — Concepts clés</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Clés</th><th>Usage</th><th>Exemples</th></tr>
+        <tr><td><span class="badge badge-blue">Symétrique</span></td><td>1 clé (même)</td><td>Chiffrement de données</td><td>AES, 3DES, RC4</td></tr>
+        <tr><td><span class="badge badge-purple">Asymétrique</span></td><td>Paire (pub+priv)</td><td>Échange de clés, signatures</td><td>RSA, ECC, DSA</td></tr>
+        <tr><td><span class="badge badge-green">Hachage</span></td><td>Aucune</td><td>Intégrité, mdp</td><td>MD5, SHA-1, SHA-256</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Algorithmes de hachage</h3>
+      <table>
+        <tr><th>Algo</th><th>Taille</th><th>Sécurité</th></tr>
+        <tr><td><code>MD5</code></td><td>128 bits</td><td style="color:var(--accent5)">❌ Obsolète (collisions)</td></tr>
+        <tr><td><code>SHA-1</code></td><td>160 bits</td><td style="color:var(--accent5)">❌ Déprécié</td></tr>
+        <tr><td><code>SHA-256</code></td><td>256 bits</td><td style="color:var(--accent2)">✅ Recommandé</td></tr>
+        <tr><td><code>SHA-512</code></td><td>512 bits</td><td style="color:var(--accent2)">✅ Très sécurisé</td></tr>
+        <tr><td><code>bcrypt</code></td><td>Variable</td><td style="color:var(--accent2)">✅ Mots de passe</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>PKI & Certificats</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:var(--accent2)">CA</strong> (Certificate Authority) = autorité de certification</li>
+        <li><strong style="color:var(--accent2)">Certificat X.509</strong> = standard de certificat numérique</li>
+        <li><strong style="color:var(--accent2)">CSR</strong> = Certificate Signing Request</li>
+        <li><strong style="color:var(--accent2)">CRL</strong> = Certificate Revocation List</li>
+        <li><strong style="color:var(--accent2)">OCSP</strong> = Online Certificate Status Protocol</li>
+        <li>Chaîne : Root CA → Intermediate CA → Certificat final</li>
+      </ul>
+      <hr class="sep">
+      <h3>VPN — Protocoles</h3>
+      <table>
+        <tr><th>Protocole</th><th>Port</th><th>Sécurité</th></tr>
+        <tr><td>PPTP</td><td>1723 TCP</td><td style="color:var(--accent5)">Faible (obsolète)</td></tr>
+        <tr><td>L2TP/IPSec</td><td>1701/500 UDP</td><td style="color:var(--accent4)">Moyen</td></tr>
+        <tr><td>OpenVPN</td><td>1194 UDP</td><td style="color:var(--accent2)">Fort</td></tr>
+        <tr><td>WireGuard</td><td>51820 UDP</td><td style="color:var(--accent2)">Très fort (moderne)</td></tr>
+        <tr><td>IKEv2/IPSec</td><td>500/4500 UDP</td><td style="color:var(--accent2)">Fort</td></tr>
+        <tr><td>SSL/TLS VPN</td><td>443 TCP</td><td style="color:var(--accent2)">Fort</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Pare-feu & ACL</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong>Stateless</strong> : filtre paquet par paquet (sans état)</li>
+        <li><strong>Stateful</strong> : suit l'état des connexions TCP</li>
+        <li><strong>Applicatif (L7)</strong> : inspecte le contenu applicatif (DPI)</li>
+        <li><strong>Next-Gen Firewall</strong> : IPS/IDS intégré + filtrage applicatif</li>
+      </ul>
+      <hr class="sep">
+      <h3>AAA — Modèle de sécurité</h3>
+      <table>
+        <tr><td><strong style="color:var(--accent)">A</strong>uthentication</td><td>Qui es-tu ? (identité)</td></tr>
+        <tr><td><strong style="color:var(--accent)">A</strong>uthorization</td><td>Qu'as-tu le droit de faire ?</td></tr>
+        <tr><td><strong style="color:var(--accent)">A</strong>ccounting</td><td>Qu'as-tu fait ? (audit)</td></tr>
+      </table>
+      <div style="margin-top:0.5rem; font-size:0.8rem; color:var(--muted)">Protocoles AAA : <code>RADIUS</code> (port 1812/1813) | <code>TACACS+</code> (port 49)</div>
+      <hr class="sep">
+      <h3>Principes de sécurité</h3>
+      <ul>
+        <li><strong>Moindre privilège</strong> : droits minimaux nécessaires</li>
+        <li><strong>Défense en profondeur</strong> : couches multiples</li>
+        <li><strong>Séparation des tâches</strong> : pas de droits cumulés</li>
+        <li><strong>CIA</strong> : Confidentialité, Intégrité, Disponibilité</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====== VIRT ====== -->
+<div class="section" id="virt">
+  <div class="section-title"><h2>Virtualisation & Cloud</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Hyperviseurs</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Description</th><th>Exemples</th></tr>
+        <tr><td><span class="badge badge-blue">Type 1 (bare metal)</span></td><td>Directement sur matériel, pas d'OS hôte</td><td>VMware ESXi, Hyper-V, XenServer, KVM</td></tr>
+        <tr><td><span class="badge badge-orange">Type 2 (hosted)</span></td><td>Sur un OS hôte existant</td><td>VMware Workstation, VirtualBox, Parallels</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>VMware vSphere — Concepts</h3>
+      <table>
+        <tr><th>Terme</th><th>Définition</th></tr>
+        <tr><td><code>vCenter</code></td><td>Plateforme de gestion centralisée des hôtes ESXi</td></tr>
+        <tr><td><code>ESXi</code></td><td>Hyperviseur bare metal de VMware</td></tr>
+        <tr><td><code>vMotion</code></td><td>Migration à chaud d'une VM d'un hôte à l'autre</td></tr>
+        <tr><td><code>vSAN</code></td><td>Stockage distribué entre les hôtes</td></tr>
+        <tr><td><code>DRS</code></td><td>Équilibrage automatique de charge</td></tr>
+        <tr><td><code>HA</code></td><td>High Availability = redémarrage auto sur panne hôte</td></tr>
+        <tr><td><code>Snapshot</code></td><td>Copie de l'état d'une VM à un instant T</td></tr>
+        <tr><td><code>Template</code></td><td>VM modèle pour déploiement rapide</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Hyper-V (Windows Server)</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong>Génération 1</strong> : BIOS legacy, IDE, compatible avec anciens OS</li>
+        <li><strong>Génération 2</strong> : UEFI, SCSI, boot réseau, Secure Boot</li>
+        <li><strong>Virtual Switch</strong> : Externe / Interne / Privé</li>
+        <li><strong>Live Migration</strong> : déplacement à chaud de VM entre hôtes</li>
+        <li><strong>Checkpoints</strong> = snapshots Hyper-V</li>
+        <li><strong>Replica</strong> : réplication asynchrone de VM</li>
+      </ul>
+      <hr class="sep">
+      <h3>Cloud — Modèles de service</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Modèle</th><th>Gestion client</th><th>Exemples</th></tr>
+        <tr><td><span class="badge badge-red">IaaS</span></td><td>OS + Apps + Data</td><td>AWS EC2, Azure VM, OVH</td></tr>
+        <tr><td><span class="badge badge-orange">PaaS</span></td><td>Apps + Data seulement</td><td>Azure App Service, Heroku</td></tr>
+        <tr><td><span class="badge badge-green">SaaS</span></td><td>Rien (tout géré)</td><td>Office 365, Salesforce, Gmail</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Modèles de déploiement Cloud</h3>
+      <ul>
+        <li><strong>Public</strong> : ressources partagées (AWS, Azure, GCP)</li>
+        <li><strong>Privé</strong> : ressources dédiées à une organisation</li>
+        <li><strong>Hybride</strong> : mix public + privé interconnectés</li>
+        <li><strong>Multi-cloud</strong> : plusieurs fournisseurs cloud</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Conteneurisation (Docker)</h3>
+    <div class="two-col">
+      <div>
+        <div class="cmd-block"><span class="cmd">docker ps -a</span> <span class="comment">— liste conteneurs</span></div>
+        <div class="cmd-block"><span class="cmd">docker images</span> <span class="comment">— liste images</span></div>
+        <div class="cmd-block"><span class="cmd">docker run -d -p 80:80 nginx</span></div>
+        <div class="cmd-block"><span class="cmd">docker stop / start &lt;id&gt;</span></div>
+        <div class="cmd-block"><span class="cmd">docker exec -it &lt;id&gt; bash</span></div>
+      </div>
+      <div>
+        <ul style="margin-top:0.25rem">
+          <li><strong>Image</strong> = modèle read-only (Dockerfile)</li>
+          <li><strong>Conteneur</strong> = instance en cours d'exécution</li>
+          <li><strong>Registry</strong> = dépôt d'images (Docker Hub)</li>
+          <li><strong>VM vs Conteneur</strong> : conteneur partage le noyau OS hôte</li>
+          <li><strong>Dockerfile</strong> = instructions pour construire une image</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== RECAP ====== -->
+<div class="section" id="recap">
+  <div class="section-title"><h2>Récapitulatif mémo — À retenir absolument</h2></div>
+
+  <div class="grid-3">
+    <div class="card green">
+      <h3>🔢 Nombres clés</h3>
+      <table style="margin-top:0.5rem">
+        <tr><td>Couches OSI</td><td><span class="big">7</span></td></tr>
+        <tr><td>Couches TCP/IP</td><td><span class="big">4</span></td></tr>
+        <tr><td>Bits IPv4</td><td><span class="big">32</span></td></tr>
+        <tr><td>Bits IPv6</td><td><span class="big">128</span></td></tr>
+        <tr><td>Bits adresse MAC</td><td><span class="big">48</span></td></tr>
+        <tr><td>Rôles FSMO</td><td><span class="big">5</span></td></tr>
+        <tr><td>Max hôtes /24</td><td><span class="big">254</span></td></tr>
+        <tr><td>Max ports TCP/UDP</td><td><span class="big">65535</span></td></tr>
+      </table>
+    </div>
+
+    <div class="card blue">
+      <h3>📡 Ports critiques</h3>
+      <table style="margin-top:0.5rem">
+        <tr><td><code>22</code></td><td>SSH</td></tr>
+        <tr><td><code>25</code></td><td>SMTP</td></tr>
+        <tr><td><code>53</code></td><td>DNS (TCP+UDP)</td></tr>
+        <tr><td><code>67/68</code></td><td>DHCP</td></tr>
+        <tr><td><code>80</code></td><td>HTTP</td></tr>
+        <tr><td><code>88</code></td><td>Kerberos</td></tr>
+        <tr><td><code>389</code></td><td>LDAP</td></tr>
+        <tr><td><code>443</code></td><td>HTTPS</td></tr>
+        <tr><td><code>445</code></td><td>SMB</td></tr>
+        <tr><td><code>3389</code></td><td>RDP</td></tr>
+      </table>
+    </div>
+
+    <div class="card purple">
+      <h3>🗝️ Acronymes essentiels</h3>
+      <table style="margin-top:0.5rem">
+        <tr><td><code>CIDR</code></td><td>Classless Inter-Domain Routing</td></tr>
+        <tr><td><code>NAT</code></td><td>Network Address Translation</td></tr>
+        <tr><td><code>ARP</code></td><td>Address Resolution Protocol</td></tr>
+        <tr><td><code>ICMP</code></td><td>Internet Control Message Protocol</td></tr>
+        <tr><td><code>TTL</code></td><td>Time To Live</td></tr>
+        <tr><td><code>MTU</code></td><td>Maximum Transmission Unit (1500 oct Ethernet)</td></tr>
+        <tr><td><code>QoS</code></td><td>Quality of Service</td></tr>
+        <tr><td><code>SNMP</code></td><td>Simple Network Management Protocol</td></tr>
+        <tr><td><code>NTP</code></td><td>Network Time Protocol</td></tr>
+        <tr><td><code>FQDN</code></td><td>Fully Qualified Domain Name</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card orange">
+      <h3>⚡ Formules mémo rapide</h3>
+      <div class="formula">OSI ↑ : Ph − Li − Ré − Tr − Se − Pr − Ap</div>
+      <div class="formula">DHCP : D → O → R → A (Discover Offer Request Ack)</div>
+      <div class="formula">TCP 3-way : SYN → SYN/ACK → ACK</div>
+      <div class="formula">Hôtes /CIDR = 2^(32−n) − 2</div>
+      <div class="formula">Sous-réseaux = 2^(bits empruntés)</div>
+      <div class="formula">Broadcast = @réseau + 2^(bits hôtes) − 1</div>
+      <div class="formula">GPO ordre : Local → Site → Domaine → OU</div>
+      <div class="formula">AD groupes AGDLP : Accounts → Global → DomLocal → Perms</div>
+      <div class="formula">AAA = Authentication + Authorization + Accounting</div>
+      <div class="formula">CIA = Confidentialité + Intégrité + Disponibilité</div>
+    </div>
+
+    <div class="card red">
+      <h3>⚠️ Pièges courants</h3>
+      <ul style="margin-top:0.5rem">
+        <li>DNS utilise <strong>TCP ET UDP</strong> sur le port 53 (UDP pour requêtes, TCP pour transferts de zone)</li>
+        <li>ARP fonctionne à la couche <strong>2/3</strong> (liaison/réseau)</li>
+        <li>Le broadcast d'un réseau N'EST PAS utilisable comme adresse hôte</li>
+        <li>DHCP client écoute sur <strong>68</strong>, serveur sur <strong>67</strong></li>
+        <li>SSH = port <strong>22</strong> (pas 23 qui est Telnet)</li>
+        <li>HTTPS = port <strong>443</strong> (pas 80 qui est HTTP)</li>
+        <li>FTP a <strong>2 ports</strong> : 20 (données) et 21 (commandes)</li>
+        <li>LDAP non sécurisé = <strong>389</strong>, sécurisé (LDAPS) = <strong>636</strong></li>
+        <li>RDP = port <strong>3389</strong> (Windows Bureau à distance)</li>
+        <li>Un /30 n'a que <strong>2 hôtes utilisables</strong> (point à point)</li>
+        <li>OSPF utilise la <strong>bande passante</strong> comme métrique (pas les sauts)</li>
+        <li>RIP est limité à <strong>15 sauts</strong> maximum</li>
+        <li>La Distance Administrative la plus <strong>basse</strong> est la plus prioritaire</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .content -->
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('nav button');
+  const sections = ['osi','ports','ip','routage','ad','windows','linux','secu','virt','recap'];
+  btns[sections.indexOf(id)].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
