@@ -73,6 +73,7 @@
   .card.purple { border-color: #8250df; }
   .card.orange { border-color: #9a6700; }
   .card.red { border-color: #da3633; }
+  .card.teal { border-color: #1abc9c; }
   table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
   th {
     background: var(--surface2); color: var(--muted);
@@ -96,6 +97,7 @@
   .badge-purple { background: #1e0f40; color: var(--accent3); border: 1px solid #8250df; }
   .badge-orange { background: #2d1e0a; color: var(--accent4); border: 1px solid #9a6700; }
   .badge-red { background: #2d0a0a; color: var(--accent5); border: 1px solid #da3633; }
+  .badge-teal { background: #0a2d26; color: #1abc9c; border: 1px solid #1abc9c; }
   .osi-row { display: flex; align-items: stretch; margin-bottom: 3px; border-radius: 5px; overflow: hidden; }
   .osi-num { width: 28px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
   .osi-name { width: 140px; padding: 0.4rem 0.7rem; font-weight: 600; font-size: 0.82rem; flex-shrink: 0; }
@@ -115,6 +117,8 @@
   }
   .cmd-block .cmd { color: var(--accent2); }
   .cmd-block .comment { color: var(--muted); }
+  .cmd-block .prompt { color: var(--accent5); }
+  .cmd-block .keyword { color: var(--accent3); }
   .ip-class { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0.75rem; border-radius: 5px; margin-bottom: 4px; }
   .cidr-table td:first-child { font-family: var(--mono); color: var(--accent4); }
   .cidr-table td:last-child { font-family: var(--mono); color: var(--accent2); }
@@ -126,12 +130,47 @@
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } .osi-proto { display: none; } }
   .formula { font-family: var(--mono); font-size: 0.85rem; background: var(--surface2); border-left: 3px solid var(--accent); padding: 0.5rem 1rem; border-radius: 0 5px 5px 0; margin: 0.5rem 0; color: var(--accent6); }
+  .formula.orange { border-left-color: var(--accent4); color: var(--accent4); }
+  .formula.green { border-left-color: var(--accent2); color: var(--accent2); }
+  .formula.red { border-left-color: var(--accent5); color: var(--accent5); }
+  .formula.purple { border-left-color: var(--accent3); color: var(--accent3); }
   .sep { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
   .label { font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
   .big { font-size: 1.5rem; font-weight: 700; font-family: var(--mono); color: var(--accent); }
   .port-crit td:first-child { color: var(--accent5); font-weight: 700; font-family: var(--mono); }
   .port-std td:first-child { color: var(--accent4); font-family: var(--mono); }
   .section-title { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+  /* AGDLP diagram */
+  .agdlp-flow { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+  .agdlp-box { padding: 0.5rem 1rem; border-radius: 6px; font-family: var(--mono); font-weight: 600; font-size: 0.85rem; text-align: center; min-width: 100px; }
+  .agdlp-arrow { color: var(--muted); font-size: 1.2rem; }
+  .agdlp-a { background: #0c1d40; border: 1px solid #1f6feb; color: var(--accent6); }
+  .agdlp-g { background: #0d2d1a; border: 1px solid #238636; color: var(--accent2); }
+  .agdlp-dl { background: #1e0f40; border: 1px solid #8250df; color: var(--accent3); }
+  .agdlp-p { background: #2d1e0a; border: 1px solid #9a6700; color: var(--accent4); }
+  /* GPO inheritance diagram */
+  .gpo-inherit { display: flex; flex-direction: column; gap: 3px; margin: 0.75rem 0; }
+  .gpo-level { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0.75rem; border-radius: 5px; font-size: 0.82rem; }
+  .gpo-l1 { background: #1a0d2e; border-left: 3px solid #8250df; }
+  .gpo-l2 { background: #0d1f3a; border-left: 3px solid #1f6feb; margin-left: 1rem; }
+  .gpo-l3 { background: #0d2a1a; border-left: 3px solid #238636; margin-left: 2rem; }
+  .gpo-l4 { background: #2a1f0d; border-left: 3px solid #e09a00; margin-left: 3rem; }
+  .gpo-num { font-family: var(--mono); font-weight: 700; font-size: 0.75rem; color: var(--muted); width: 20px; }
+  /* Cisco IOS mode styling */
+  .ios-mode { display: flex; flex-direction: column; gap: 3px; margin: 0.75rem 0; }
+  .ios-level { display: flex; align-items: center; gap: 0.75rem; padding: 0.4rem 0.75rem; border-radius: 5px; font-family: var(--mono); font-size: 0.8rem; }
+  .ios-l0 { background: #1a0d2e; border-left: 3px solid var(--accent5); }
+  .ios-l1 { background: #0d2a1a; border-left: 3px solid var(--accent2); }
+  .ios-l2 { background: #2a1f0d; border-left: 3px solid var(--accent4); }
+  .ios-l3 { background: #0d1f3a; border-left: 3px solid var(--accent6); }
+  .ios-prompt { color: var(--accent5); font-weight: 700; }
+  .ios-cmd { color: var(--accent2); }
+  /* ITIL lifecycle */
+  .itil-phase { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 6px; margin-bottom: 4px; }
+  .itil-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+  /* Disk partition type styling */
+  .disk-visual { display: flex; height: 36px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin: 0.75rem 0; }
+  .disk-part { display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.7rem; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -146,11 +185,16 @@
   <button onclick="show('ports')">Ports & Protocoles</button>
   <button onclick="show('ip')">Adressage IP</button>
   <button onclick="show('routage')">Routage & VLAN</button>
+  <button onclick="show('cisco')">Cisco IOS</button>
   <button onclick="show('ad')">Active Directory</button>
+  <button onclick="show('gpo')">GPO & AGDLP</button>
   <button onclick="show('windows')">Windows Server</button>
   <button onclick="show('linux')">Linux</button>
+  <button onclick="show('disques')">Disques</button>
+  <button onclick="show('scripting')">Scripting</button>
   <button onclick="show('secu')">Sécurité</button>
   <button onclick="show('virt')">Virtualisation</button>
+  <button onclick="show('itil')">ITIL & GLPI</button>
   <button onclick="show('recap')">Récap mémo</button>
 </nav>
 
@@ -159,7 +203,6 @@
 <!-- ====== OSI ====== -->
 <div class="section active" id="osi">
   <div class="section-title"><h2>Modèles OSI & TCP/IP</h2></div>
-
   <div class="grid">
     <div class="card">
       <h3>Modèle OSI — 7 couches</h3>
@@ -174,7 +217,6 @@
       </div>
       <div style="margin-top:0.75rem; font-size:0.78rem; color:var(--muted)">Mnémotechnique ↑ : <span style="color:var(--accent3)">«&nbsp;Physique Liaison Réseau Transport Session Présentation Application&nbsp;»</span></div>
     </div>
-
     <div class="card">
       <h3>Modèle TCP/IP — 4 couches</h3>
       <table style="margin-top:0.75rem">
@@ -184,7 +226,6 @@
         <tr><td style="color:var(--accent4)">Internet</td><td>3</td><td><code>IP ICMP ARP</code></td></tr>
         <tr><td style="color:var(--accent5)">Accès réseau</td><td>1 + 2</td><td><code>Ethernet Wi-Fi</code></td></tr>
       </table>
-
       <hr class="sep">
       <h3>TCP vs UDP</h3>
       <table>
@@ -198,7 +239,6 @@
       <div class="formula">3-way handshake : SYN → SYN-ACK → ACK</div>
     </div>
   </div>
-
   <div class="card">
     <h3>Unités de données (PDU)</h3>
     <table>
@@ -251,7 +291,6 @@
         <tr><td>8080</td><td>HTTP alt</td><td>TCP</td><td>Proxy / serveur alternatif</td></tr>
       </table>
     </div>
-
     <div>
       <div class="card" style="margin-bottom:1rem">
         <h3>Plages de ports</h3>
@@ -262,7 +301,6 @@
           <tr><td><code>49152 – 65535</code></td><td>Ports dynamiques / éphémères</td></tr>
         </table>
       </div>
-
       <div class="card" style="margin-bottom:1rem">
         <h3>Protocoles de messagerie</h3>
         <table style="margin-top:0.5rem">
@@ -272,7 +310,6 @@
           <tr><td>IMAP</td><td>Réception (synchronise)</td><td>143 / 993</td></tr>
         </table>
       </div>
-
       <div class="card">
         <h3>Protocoles de sécurité</h3>
         <ul style="margin-top:0.5rem">
@@ -292,7 +329,6 @@
 <!-- ====== IP ====== -->
 <div class="section" id="ip">
   <div class="section-title"><h2>Adressage IP</h2></div>
-
   <div class="grid">
     <div class="card">
       <h3>Classes IPv4</h3>
@@ -305,7 +341,6 @@
         <tr><td><span class="badge" style="background:#2a2a2a;color:var(--muted);border:1px solid var(--border)">E</span></td><td>240–255</td><td>N/A</td><td>Réservé</td><td>Expérimental</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h3>Adresses privées RFC 1918</h3>
       <table style="margin-top:0.5rem">
@@ -324,7 +359,6 @@
       </table>
     </div>
   </div>
-
   <div class="grid">
     <div class="card">
       <h3>Table CIDR — Masques de sous-réseau</h3>
@@ -345,7 +379,6 @@
       <div class="formula">Hôtes utilisables = 2^(32−CIDR) − 2</div>
       <div class="formula">Nb sous-réseaux = 2^n (n = bits empruntés)</div>
     </div>
-
     <div>
       <div class="card" style="margin-bottom:1rem">
         <h3>IPv6 — L'essentiel</h3>
@@ -364,7 +397,6 @@
         </table>
         <div class="formula">Pas de broadcast en IPv6 → remplacé par multicast</div>
       </div>
-
       <div class="card">
         <h3>Calcul réseau — Méthode rapide</h3>
         <ol style="margin-top:0.5rem; padding-left:1.2rem; font-size:0.85rem">
@@ -383,7 +415,6 @@
 <!-- ====== ROUTAGE ====== -->
 <div class="section" id="routage">
   <div class="section-title"><h2>Routage & VLAN</h2></div>
-
   <div class="grid">
     <div class="card">
       <h3>Protocoles de routage</h3>
@@ -396,11 +427,8 @@
         <tr><td><code>Statique</code></td><td>Manuel</td><td>—</td><td>—</td><td>1</td></tr>
         <tr><td><code>Directement connecté</code></td><td>—</td><td>—</td><td>—</td><td>0</td></tr>
       </table>
-      <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--muted)">
-        ↓ Distance administrative = priorité (plus petit = plus prioritaire)
-      </div>
+      <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--muted)">↓ Distance administrative = priorité (plus petit = plus prioritaire)</div>
     </div>
-
     <div class="card">
       <h3>VLAN</h3>
       <ul style="margin-top:0.5rem">
@@ -421,7 +449,6 @@
       </ul>
     </div>
   </div>
-
   <div class="grid">
     <div class="card">
       <h3>Équipements réseau</h3>
@@ -437,7 +464,6 @@
         <tr><td>Load balancer</td><td>L4-L7</td><td>Répartition de charge</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h3>NAT / PAT</h3>
       <table style="margin-top:0.5rem">
@@ -459,10 +485,200 @@
   </div>
 </div>
 
+<!-- ====== CISCO ====== -->
+<div class="section" id="cisco">
+  <div class="section-title"><h2>Cisco IOS — Commandes & Configuration</h2></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Modes IOS et invite de commande</h3>
+      <div class="ios-mode">
+        <div class="ios-level ios-l0"><span class="ios-prompt">Router&gt;</span>&nbsp;<span style="color:var(--muted)">Mode utilisateur — consultation basique</span></div>
+        <div class="ios-level ios-l1"><span class="ios-prompt">Router#</span>&nbsp;<span style="color:var(--muted)">Mode privilégié (enable) — show, debug, copy</span></div>
+        <div class="ios-level ios-l2"><span class="ios-prompt">Router(config)#</span>&nbsp;<span style="color:var(--muted)">Mode configuration globale (conf t)</span></div>
+        <div class="ios-level ios-l3"><span class="ios-prompt">Router(config-if)#</span>&nbsp;<span style="color:var(--muted)">Mode interface (interface fa0/0)</span></div>
+        <div class="ios-level ios-l3"><span class="ios-prompt">Router(config-router)#</span>&nbsp;<span style="color:var(--muted)">Mode protocole de routage</span></div>
+        <div class="ios-level ios-l3"><span class="ios-prompt">Router(config-vlan)#</span>&nbsp;<span style="color:var(--muted)">Mode configuration VLAN</span></div>
+      </div>
+      <div class="formula">User → enable → conf t → interface fa0/0</div>
+      <hr class="sep">
+      <h3>Raccourcis IOS essentiels</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Commande</th><th>Action</th></tr>
+        <tr><td><code>?</code></td><td>Aide contextuelle</td></tr>
+        <tr><td><code>Tab</code></td><td>Auto-complétion</td></tr>
+        <tr><td><code>Ctrl+Z</code></td><td>Retour mode privilégié</td></tr>
+        <tr><td><code>Ctrl+C</code></td><td>Annule la commande en cours</td></tr>
+        <tr><td><code>no &lt;commande&gt;</code></td><td>Supprime / annule une config</td></tr>
+        <tr><td><code>do &lt;cmd&gt;</code></td><td>Lance une cmd privilégiée depuis config</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Commandes show — Diagnostic</h3>
+      <div class="cmd-block"><span class="cmd">show version</span> <span class="comment">— IOS, RAM, Flash, uptime</span></div>
+      <div class="cmd-block"><span class="cmd">show running-config</span> <span class="comment">— config active en RAM</span></div>
+      <div class="cmd-block"><span class="cmd">show startup-config</span> <span class="comment">— config sauvegardée en NVRAM</span></div>
+      <div class="cmd-block"><span class="cmd">show ip interface brief</span> <span class="comment">— état résumé des interfaces</span></div>
+      <div class="cmd-block"><span class="cmd">show interfaces fa0/0</span> <span class="comment">— détail d'une interface</span></div>
+      <div class="cmd-block"><span class="cmd">show ip route</span> <span class="comment">— table de routage</span></div>
+      <div class="cmd-block"><span class="cmd">show ip protocols</span> <span class="comment">— protocoles de routage actifs</span></div>
+      <div class="cmd-block"><span class="cmd">show vlan brief</span> <span class="comment">— liste des VLANs (switch)</span></div>
+      <div class="cmd-block"><span class="cmd">show interfaces trunk</span> <span class="comment">— ports trunk actifs</span></div>
+      <div class="cmd-block"><span class="cmd">show mac address-table</span> <span class="comment">— table CAM du switch</span></div>
+      <div class="cmd-block"><span class="cmd">show arp</span> <span class="comment">— cache ARP</span></div>
+      <div class="cmd-block"><span class="cmd">show cdp neighbors</span> <span class="comment">— voisins CDP (Cisco)</span></div>
+      <div class="cmd-block"><span class="cmd">show spanning-tree</span> <span class="comment">— état STP</span></div>
+      <div class="cmd-block"><span class="cmd">show crypto isakmp sa</span> <span class="comment">— sessions VPN IPSec</span></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Configuration de base — Routeur</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Nom d'hôte et sécurité</span><br>
+        <span class="cmd">hostname R1</span><br>
+        <span class="cmd">enable secret MonMotDePasse</span><br>
+        <span class="cmd">service password-encryption</span><br>
+        <span class="cmd">no ip domain-lookup</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Interface</span><br>
+        <span class="cmd">interface GigabitEthernet0/0</span><br>
+        <span class="cmd">ip address 192.168.1.1 255.255.255.0</span><br>
+        <span class="cmd">no shutdown</span><br>
+        <span class="cmd">description LAN_Principal</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Console et VTY (SSH/Telnet)</span><br>
+        <span class="cmd">line console 0</span><br>
+        <span class="cmd">password cisco</span><br>
+        <span class="cmd">login</span><br>
+        <span class="cmd">line vty 0 4</span><br>
+        <span class="cmd">transport input ssh</span><br>
+        <span class="cmd">login local</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Route statique</span><br>
+        <span class="cmd">ip route 0.0.0.0 0.0.0.0 192.168.1.254</span> <span class="comment">— route par défaut</span><br>
+        <span class="cmd">ip route 10.0.0.0 255.0.0.0 192.168.1.2</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Sauvegarde config</span><br>
+        <span class="cmd">copy running-config startup-config</span><br>
+        <span class="cmd">write memory</span> <span class="comment">— raccourci</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Configuration VLAN — Switch</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Créer des VLANs</span><br>
+        <span class="cmd">vlan 10</span><br>
+        <span class="cmd">name RH</span><br>
+        <span class="cmd">vlan 20</span><br>
+        <span class="cmd">name IT</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Port Access (1 seul VLAN)</span><br>
+        <span class="cmd">interface fa0/1</span><br>
+        <span class="cmd">switchport mode access</span><br>
+        <span class="cmd">switchport access vlan 10</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Port Trunk (plusieurs VLANs)</span><br>
+        <span class="cmd">interface fa0/24</span><br>
+        <span class="cmd">switchport mode trunk</span><br>
+        <span class="cmd">switchport trunk encapsulation dot1q</span><br>
+        <span class="cmd">switchport trunk allowed vlan 10,20,30</span><br>
+        <span class="cmd">switchport trunk native vlan 99</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Inter-VLAN routing (Router-on-a-stick)</span><br>
+        <span class="cmd">interface fa0/0.10</span><br>
+        <span class="cmd">encapsulation dot1Q 10</span><br>
+        <span class="cmd">ip address 192.168.10.1 255.255.255.0</span>
+      </div>
+      <hr class="sep">
+      <h3>Configuration OSPF</h3>
+      <div class="cmd-block">
+        <span class="cmd">router ospf 1</span><br>
+        <span class="cmd">router-id 1.1.1.1</span><br>
+        <span class="cmd">network 192.168.1.0 0.0.0.255 area 0</span><br>
+        <span class="cmd">passive-interface fa0/0</span> <span class="comment">— pas d'hello sur cette iface</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>ACL — Access Control Lists</h3>
+      <table style="margin-top:0.5rem; margin-bottom:0.75rem">
+        <tr><th>Type</th><th>Numéros</th><th>Filtre sur</th><th>Placement</th></tr>
+        <tr><td><span class="badge badge-blue">Standard</span></td><td>1–99 / 1300–1999</td><td>IP source uniquement</td><td>Proche de la destination</td></tr>
+        <tr><td><span class="badge badge-orange">Étendue</span></td><td>100–199 / 2000–2699</td><td>IP src/dst, proto, ports</td><td>Proche de la source</td></tr>
+        <tr><td><span class="badge badge-green">Nommée</span></td><td>Nom libre</td><td>Standard ou étendue</td><td>Selon type</td></tr>
+      </table>
+      <div class="cmd-block">
+        <span class="comment">-- ACL standard</span><br>
+        <span class="cmd">access-list 10 permit 192.168.1.0 0.0.0.255</span><br>
+        <span class="cmd">access-list 10 deny any</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- ACL étendue</span><br>
+        <span class="cmd">access-list 101 permit tcp 192.168.1.0 0.0.0.255 any eq 80</span><br>
+        <span class="cmd">access-list 101 deny ip any any</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Appliquer sur une interface</span><br>
+        <span class="cmd">interface fa0/0</span><br>
+        <span class="cmd">ip access-group 101 in</span> <span class="comment">— in = entrant</span><br>
+        <span class="cmd">ip access-group 10 out</span> <span class="comment">— out = sortant</span>
+      </div>
+      <div style="font-size:0.78rem; color:var(--muted); margin-top:0.5rem">⚠️ Une ACL implicite <strong>deny any</strong> existe toujours à la fin</div>
+    </div>
+
+    <div class="card">
+      <h3>SSH sur Cisco IOS</h3>
+      <div class="cmd-block">
+        <span class="cmd">ip domain-name monentreprise.local</span><br>
+        <span class="cmd">crypto key generate rsa modulus 2048</span><br>
+        <span class="cmd">ip ssh version 2</span><br>
+        <span class="cmd">username admin privilege 15 secret P@ssword</span><br>
+        <span class="cmd">line vty 0 4</span><br>
+        <span class="cmd">transport input ssh</span><br>
+        <span class="cmd">login local</span>
+      </div>
+      <hr class="sep">
+      <h3>CDP / LLDP</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Protocole</th><th>Marque</th><th>Commande</th></tr>
+        <tr><td>CDP</td><td>Cisco uniquement</td><td><code>show cdp neighbors detail</code></td></tr>
+        <tr><td>LLDP</td><td>Standard IEEE 802.1AB</td><td><code>show lldp neighbors</code></td></tr>
+      </table>
+      <div class="cmd-block" style="margin-top:0.75rem">
+        <span class="cmd">cdp run</span> <span class="comment">— activer CDP globalement</span><br>
+        <span class="cmd">no cdp enable</span> <span class="comment">— désactiver sur une interface</span><br>
+        <span class="cmd">lldp run</span> <span class="comment">— activer LLDP</span>
+      </div>
+      <hr class="sep">
+      <h3>DHCP sur routeur Cisco</h3>
+      <div class="cmd-block">
+        <span class="cmd">ip dhcp pool LAN</span><br>
+        <span class="cmd">network 192.168.1.0 255.255.255.0</span><br>
+        <span class="cmd">default-router 192.168.1.1</span><br>
+        <span class="cmd">dns-server 8.8.8.8</span><br>
+        <span class="cmd">lease 8</span> <span class="comment">— bail de 8 jours</span><br>
+        <span class="cmd">ip dhcp excluded-address 192.168.1.1 192.168.1.20</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ====== AD ====== -->
 <div class="section" id="ad">
   <div class="section-title"><h2>Active Directory</h2></div>
-
   <div class="grid">
     <div class="card">
       <h3>Concepts fondamentaux</h3>
@@ -482,7 +698,6 @@
         <tr><td><code>FSMO</code></td><td>Flexible Single Master Operations (rôles maîtres)</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h3>Rôles FSMO (5 à connaître)</h3>
       <table style="margin-top:0.5rem">
@@ -494,34 +709,8 @@
         <tr><td><code>Infrastructure Master</code></td><td>Domaine</td><td>Maintient références inter-domaines</td></tr>
       </table>
       <hr class="sep">
-      <h3>Types de groupes AD</h3>
-      <table>
-        <tr><th>Étendue</th><th>Membres</th><th>Droits</th></tr>
-        <tr><td><span class="badge badge-blue">Global</span></td><td>Même domaine</td><td>Tout domaine de la forêt</td></tr>
-        <tr><td><span class="badge badge-purple">Universal</span></td><td>Toute la forêt</td><td>Toute la forêt</td></tr>
-        <tr><td><span class="badge badge-orange">Domain Local</span></td><td>Toute la forêt</td><td>Domaine local seulement</td></tr>
-      </table>
-      <div style="margin-top:0.5rem; font-size:0.78rem; color:var(--muted)">Bonnes pratiques AGDLP : Accounts → Global → Domain Local → Permissions</div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <h3>GPO — Group Policy</h3>
-      <ul style="margin-top:0.5rem">
-        <li>Les GPO s'appliquent dans l'ordre : <strong style="color:var(--accent)">L → S → D → OU</strong> (Local → Site → Domaine → OU)</li>
-        <li>La GPO la plus proche (OU) est la dernière appliquée = prioritaire</li>
-        <li><strong>Bloc héritage</strong> : empêche l'héritage des GPO parentes</li>
-        <li><strong>Enforced (No Override)</strong> : force l'application même si bloc héritage</li>
-        <li><strong>Loopback processing</strong> : applique GPO de l'OU ordinateur à l'utilisateur</li>
-        <li>Commande de forçage : <code>gpupdate /force</code></li>
-        <li>Résultat : <code>gpresult /h rapport.html</code></li>
-      </ul>
-    </div>
-
-    <div class="card">
       <h3>DNS — Enregistrements</h3>
-      <table style="margin-top:0.5rem">
+      <table>
         <tr><th>Type</th><th>Rôle</th></tr>
         <tr><td><code>A</code></td><td>Nom → IPv4</td></tr>
         <tr><td><code>AAAA</code></td><td>Nom → IPv6</td></tr>
@@ -538,10 +727,175 @@
   </div>
 </div>
 
+<!-- ====== GPO & AGDLP ====== -->
+<div class="section" id="gpo">
+  <div class="section-title"><h2>GPO & AGDLP — Stratégies de groupe & Délégation</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>GPO — Ordre d'application (LSDOU)</h3>
+      <p style="font-size:0.82rem; color:var(--muted); margin-bottom:0.75rem">Les GPO s'appliquent dans cet ordre — la dernière appliquée est prioritaire :</p>
+      <div class="gpo-inherit">
+        <div class="gpo-level gpo-l1"><span class="gpo-num">1</span><strong style="color:var(--accent3)">L</strong><span style="color:var(--muted)">ocal</span> — GPO locale de la machine (gpedit.msc)</div>
+        <div class="gpo-level gpo-l2"><span class="gpo-num">2</span><strong style="color:var(--accent6)">S</strong><span style="color:var(--muted)">ite</span> — GPO liées au site AD (ex: Paris)</div>
+        <div class="gpo-level gpo-l3"><span class="gpo-num">3</span><strong style="color:var(--accent2)">D</strong><span style="color:var(--muted)">omaine</span> — GPO liées au domaine (appliquées à tous)</div>
+        <div class="gpo-level gpo-l4"><span class="gpo-num">4</span><strong style="color:var(--accent4)">OU</strong> — GPO liées aux Unités d'Organisation (la plus proche = prioritaire)</div>
+      </div>
+      <div class="formula">L → S → D → OU  (OU imbriquées de la plus haute à la plus proche)</div>
+      <hr class="sep">
+      <h3>Options de traitement GPO</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Option</th><th>Effet</th></tr>
+        <tr><td><span class="badge badge-orange">Enforced (No Override)</span></td><td>Force l'application même si bloc héritage est actif (priorité absolue)</td></tr>
+        <tr><td><span class="badge badge-red">Block Inheritance</span></td><td>Bloque les GPO héritées des niveaux supérieurs (sauf Enforced)</td></tr>
+        <tr><td><span class="badge badge-blue">Disabled</span></td><td>Désactive la GPO (Computer ou User uniquement)</td></tr>
+        <tr><td><span class="badge badge-purple">Loopback Replace</span></td><td>Remplace les GPO utilisateur par celles de l'OU de l'ordinateur</td></tr>
+        <tr><td><span class="badge badge-green">Loopback Merge</span></td><td>Fusionne GPO utilisateur et GPO ordinateur (ordinateur prioritaire)</td></tr>
+        <tr><td><span class="badge badge-teal">WMI Filter</span></td><td>Applique la GPO uniquement si la condition WMI est vraie</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>GPO — Contenu et paramètres clés</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Section</th><th>Exemples de paramètres</th></tr>
+        <tr><td><span class="badge badge-blue">Configuration Ordinateur</span></td><td>Stratégies Windows, Paramètres de sécurité, Scripts démarrage, Logiciels</td></tr>
+        <tr><td><span class="badge badge-green">Configuration Utilisateur</span></td><td>Bureau, Menu démarrer, Scripts d'ouverture de session, Dossiers redirigés</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Exemples de paramètres GPO courants</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:var(--accent4)">Fond d'écran imposé</strong> → Config Utilisateur &gt; Paramètres Windows &gt; Paramètres du bureau</li>
+        <li><strong style="color:var(--accent4)">Politique de mots de passe</strong> → Config Ordinateur &gt; Paramètres Windows &gt; Sécurité &gt; Stratégies de compte</li>
+        <li><strong style="color:var(--accent4)">Redirection de dossier</strong> → Config Utilisateur &gt; Paramètres Windows &gt; Redirection de dossier</li>
+        <li><strong style="color:var(--accent4)">Déploiement logiciel</strong> → Config Ordi/Utilisateur &gt; Paramètres logiciels &gt; Installation de logiciels (.msi)</li>
+        <li><strong style="color:var(--accent4)">Scripts de connexion</strong> → Config Utilisateur &gt; Paramètres Windows &gt; Scripts (Connexion/Déconnexion)</li>
+        <li><strong style="color:var(--accent4)">Lecteurs réseau</strong> → Config Utilisateur &gt; Préférences &gt; Paramètres Windows &gt; Mappages de lecteur</li>
+        <li><strong style="color:var(--accent4)">Pare-feu Windows</strong> → Config Ordinateur &gt; Paramètres Windows &gt; Sécurité &gt; Pare-feu</li>
+        <li><strong style="color:var(--accent4)">Restriction logicielle / AppLocker</strong> → Config Ordinateur &gt; Stratégies &gt; Paramètres Windows &gt; Sécurité</li>
+      </ul>
+      <hr class="sep">
+      <h3>Commandes GPO essentielles</h3>
+      <div class="cmd-block"><span class="cmd">gpupdate /force</span> <span class="comment">— forcer l'application des GPO</span></div>
+      <div class="cmd-block"><span class="cmd">gpresult /r</span> <span class="comment">— résumé des GPO appliquées</span></div>
+      <div class="cmd-block"><span class="cmd">gpresult /h C:\rapport.html</span> <span class="comment">— rapport HTML détaillé</span></div>
+      <div class="cmd-block"><span class="cmd">gpresult /scope computer /v</span> <span class="comment">— GPO ordinateur verbose</span></div>
+      <div class="cmd-block"><span class="cmd">gpresult /user jdupont /r</span> <span class="comment">— GPO d'un utilisateur spécifique</span></div>
+      <div class="cmd-block"><span class="cmd">Rsop.msc</span> <span class="comment">— Resultant Set of Policy (console)</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <h3>🏆 AGDLP — Méthode de délégation des permissions (Best Practice Microsoft)</h3>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:1rem">AGDLP est la méthode recommandée pour structurer les accès aux ressources dans un environnement Active Directory multi-domaines.</p>
+
+    <div class="agdlp-flow">
+      <div class="agdlp-box agdlp-a">
+        <div style="font-size:0.65rem; color:var(--muted); margin-bottom:2px">ACCOUNTS</div>
+        <div style="font-size:1.1rem">A</div>
+        <div style="font-size:0.7rem; margin-top:2px">Comptes utilisateurs / ordinateurs</div>
+      </div>
+      <div class="agdlp-arrow">→</div>
+      <div class="agdlp-box agdlp-g">
+        <div style="font-size:0.65rem; color:var(--muted); margin-bottom:2px">GLOBAL</div>
+        <div style="font-size:1.1rem">G</div>
+        <div style="font-size:0.7rem; margin-top:2px">Groupe Global (par domaine)</div>
+      </div>
+      <div class="agdlp-arrow">→</div>
+      <div class="agdlp-box agdlp-dl">
+        <div style="font-size:0.65rem; color:var(--muted); margin-bottom:2px">DOMAIN LOCAL</div>
+        <div style="font-size:1.1rem">DL</div>
+        <div style="font-size:0.7rem; margin-top:2px">Groupe Domain Local (par ressource)</div>
+      </div>
+      <div class="agdlp-arrow">→</div>
+      <div class="agdlp-box agdlp-p">
+        <div style="font-size:0.65rem; color:var(--muted); margin-bottom:2px">PERMISSIONS</div>
+        <div style="font-size:1.1rem">P</div>
+        <div style="font-size:0.7rem; margin-top:2px">NTFS / Partage</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:1rem">
+      <div>
+        <h3>Types de groupes AD</h3>
+        <table style="margin-top:0.5rem">
+          <tr><th>Étendue</th><th>Membres acceptés</th><th>Droits accordés</th></tr>
+          <tr><td><span class="badge badge-blue">Global (G)</span></td><td>Comptes et groupes du <strong>même domaine</strong></td><td>N'importe quel domaine de la forêt</td></tr>
+          <tr><td><span class="badge badge-purple">Universal (U)</span></td><td>Comptes, globaux et universels de <strong>toute la forêt</strong></td><td>Toute la forêt</td></tr>
+          <tr><td><span class="badge badge-orange">Domain Local (DL)</span></td><td>Comptes et groupes de <strong>toute la forêt</strong></td><td>Domaine local <strong>seulement</strong></td></tr>
+        </table>
+        <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--muted)">
+          ⚠️ Différence Universal vs Global : Universal stocké dans le Global Catalog (réplication forêt entière), à utiliser avec parcimonie.
+        </div>
+      </div>
+      <div>
+        <h3>Exemple concret AGDLP</h3>
+        <div style="font-size:0.82rem; margin-top:0.5rem">
+          <p style="color:var(--muted); margin-bottom:0.5rem">Objectif : donner accès au partage <code>\\SRV-FILE\Compta</code> aux comptables.</p>
+          <table>
+            <tr><th>Étape</th><th>Objet créé</th><th>Contient / reçoit</th></tr>
+            <tr><td><span class="badge badge-blue">A</span></td><td>jdupont, mmartin (comptes)</td><td>—</td></tr>
+            <tr><td><span class="badge badge-green">G</span></td><td>GG_Comptables</td><td>jdupont, mmartin</td></tr>
+            <tr><td><span class="badge badge-purple">DL</span></td><td>DL_Compta_RW</td><td>GG_Comptables</td></tr>
+            <tr><td><span class="badge badge-orange">P</span></td><td>Perm NTFS Modifier</td><td>accordée à DL_Compta_RW</td></tr>
+          </table>
+          <div class="formula green" style="margin-top:0.75rem">jdupont → GG_Comptables → DL_Compta_RW → Modifier sur \\SRV-FILE\Compta</div>
+        </div>
+        <div style="margin-top:0.75rem">
+          <h3>Avantages AGDLP</h3>
+          <ul>
+            <li>Ajout d'un utilisateur : on l'ajoute au groupe Global uniquement</li>
+            <li>Changement de ressource : on modifie le groupe Domain Local uniquement</li>
+            <li>Scalable en multi-domaines : les groupes Global traversent les domaines</li>
+            <li>Audit simplifié : la permission est portée par le DL, pas par l'individu</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Permissions NTFS vs Partage</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Permission</th><th>NTFS</th><th>Partage</th></tr>
+        <tr><td>Contrôle total</td><td>✅ Tout faire</td><td>✅ Tout faire</td></tr>
+        <tr><td>Modifier</td><td>✅ CRUD + exécuter</td><td>—</td></tr>
+        <tr><td>Lecture & exécution</td><td>✅ Lire + lancer</td><td>—</td></tr>
+        <tr><td>Lecture</td><td>✅ Lire seul</td><td>✅ Lire seul</td></tr>
+        <tr><td>Écriture</td><td>✅ Créer/modifier</td><td>—</td></tr>
+        <tr><td>Modifier (partage)</td><td>—</td><td>✅ Lire + écrire</td></tr>
+      </table>
+      <div class="formula">Accès effectif = Intersection (NTFS ∩ Partage)</div>
+      <div style="font-size:0.78rem; color:var(--muted); margin-top:0.5rem">La permission la plus restrictive s'applique entre NTFS et Partage. En accès local, seul le NTFS compte.</div>
+    </div>
+    <div class="card">
+      <h3>Délégation de contrôle dans AD</h3>
+      <ul style="margin-top:0.5rem">
+        <li>Utiliser l'<strong>Assistant Délégation de contrôle</strong> dans ADUC (clic droit sur OU)</li>
+        <li>Exemples de délégations courantes :</li>
+      </ul>
+      <table style="margin-top:0.5rem">
+        <tr><th>Tâche déléguée</th><th>Groupe typique</th></tr>
+        <tr><td>Réinitialiser les mots de passe</td><td>GG_Helpdesk</td></tr>
+        <tr><td>Créer/supprimer des comptes utilisateurs</td><td>GG_AdminRH</td></tr>
+        <tr><td>Gérer les membres d'un groupe</td><td>GG_ChefService</td></tr>
+        <tr><td>Joindre des ordinateurs au domaine</td><td>GG_Techniciens</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Commandes AGDLP / Groupes (PowerShell)</h3>
+      <div class="cmd-block"><span class="cmd">New-ADGroup -Name "GG_Comptables" -GroupScope Global -GroupCategory Security</span></div>
+      <div class="cmd-block"><span class="cmd">New-ADGroup -Name "DL_Compta_RW" -GroupScope DomainLocal -GroupCategory Security</span></div>
+      <div class="cmd-block"><span class="cmd">Add-ADGroupMember -Identity "GG_Comptables" -Members jdupont,mmartin</span></div>
+      <div class="cmd-block"><span class="cmd">Add-ADGroupMember -Identity "DL_Compta_RW" -Members "GG_Comptables"</span></div>
+      <div class="cmd-block"><span class="cmd">Get-ADGroupMember -Identity "DL_Compta_RW" -Recursive</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- ====== WINDOWS ====== -->
 <div class="section" id="windows">
   <div class="section-title"><h2>Windows Server — Commandes essentielles</h2></div>
-
   <div class="two-col">
     <div>
       <div class="card" style="margin-bottom:1rem">
@@ -559,7 +913,6 @@
         <div class="cmd-block"><span class="cmd">netsh interface ip show config</span> <span class="comment">— config réseau</span></div>
         <div class="cmd-block"><span class="cmd">netsh wlan show profiles</span> <span class="comment">— profils Wi-Fi</span></div>
       </div>
-
       <div class="card" style="margin-bottom:1rem">
         <h3>Active Directory (PowerShell)</h3>
         <div class="cmd-block"><span class="cmd">Get-ADUser -Identity jdupont</span></div>
@@ -572,7 +925,6 @@
         <div class="cmd-block"><span class="cmd">netdom join &lt;PC&gt; /domain:&lt;dom&gt;</span> <span class="comment">— jonction domaine</span></div>
       </div>
     </div>
-
     <div>
       <div class="card" style="margin-bottom:1rem">
         <h3>Système & Gestion</h3>
@@ -588,7 +940,6 @@
         <div class="cmd-block"><span class="cmd">eventvwr.msc</span> <span class="comment">— observateur d'événements</span></div>
         <div class="cmd-block"><span class="cmd">compmgmt.msc</span> <span class="comment">— gestion de l'ordinateur</span></div>
       </div>
-
       <div class="card">
         <h3>Rôles Windows Server (ADDS)</h3>
         <table style="margin-top:0.5rem">
@@ -613,7 +964,6 @@
 <!-- ====== LINUX ====== -->
 <div class="section" id="linux">
   <div class="section-title"><h2>Linux — Commandes essentielles</h2></div>
-
   <div class="two-col">
     <div>
       <div class="card" style="margin-bottom:1rem">
@@ -631,10 +981,8 @@
         <div class="cmd-block"><span class="cmd">iptables -L -n -v</span> <span class="comment">— règles pare-feu</span></div>
         <div class="cmd-block"><span class="cmd">ufw allow 22/tcp</span> <span class="comment">— pare-feu simplifié Ubuntu</span></div>
       </div>
-
       <div class="card" style="margin-bottom:1rem">
         <h3>Fichiers de config réseau</h3>
-        <div class="cmd-block"><span class="comment"># Config réseau</span></div>
         <div class="cmd-block"><span class="cmd">/etc/network/interfaces</span> <span class="comment">— Debian/Ubuntu</span></div>
         <div class="cmd-block"><span class="cmd">/etc/sysconfig/network-scripts/</span> <span class="comment">— RHEL/CentOS</span></div>
         <div class="cmd-block"><span class="cmd">/etc/netplan/*.yaml</span> <span class="comment">— Ubuntu 18+</span></div>
@@ -644,7 +992,6 @@
         <div class="cmd-block"><span class="cmd">/etc/ssh/sshd_config</span> <span class="comment">— config serveur SSH</span></div>
       </div>
     </div>
-
     <div>
       <div class="card" style="margin-bottom:1rem">
         <h3>Système & Fichiers</h3>
@@ -661,7 +1008,6 @@
         <div class="cmd-block"><span class="cmd">ps aux</span> <span class="comment">— liste des processus</span></div>
         <div class="cmd-block"><span class="cmd">kill -9 &lt;PID&gt;</span> <span class="comment">— tuer un processus</span></div>
       </div>
-
       <div class="card">
         <h3>Droits — chmod octal</h3>
         <table style="margin-top:0.5rem">
@@ -685,10 +1031,498 @@
   </div>
 </div>
 
+<!-- ====== DISQUES ====== -->
+<div class="section" id="disques">
+  <div class="section-title"><h2>Gestion des disques — Windows & Linux</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>Windows — Types de partitions</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><span class="badge badge-blue">MBR</span></td><td>Master Boot Record — max 4 partitions primaires, disques &lt; 2 To</td></tr>
+        <tr><td><span class="badge badge-green">GPT</span></td><td>GUID Partition Table — jusqu'à 128 partitions, disques &gt; 2 To, UEFI</td></tr>
+        <tr><td><span class="badge badge-orange">Basique</span></td><td>Partitions simples, indépendantes — type standard</td></tr>
+        <tr><td><span class="badge badge-purple">Dynamique</span></td><td>Volumes étendus, agrégés, miroirs, RAID-5 (ancienne méthode)</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Types de volumes dynamiques Windows</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Disques</th><th>Tolérance panne</th><th>Performances</th></tr>
+        <tr><td><span class="badge badge-blue">Simple</span></td><td>1</td><td>❌</td><td>Normal</td></tr>
+        <tr><td><span class="badge badge-blue">Fractionné (Spanned)</span></td><td>2–32</td><td>❌ pire</td><td>Normal</td></tr>
+        <tr><td><span class="badge badge-green">Agrégé (Striped) RAID-0</span></td><td>2–32</td><td>❌</td><td>✅ Rapide</td></tr>
+        <tr><td><span class="badge badge-orange">Miroir RAID-1</span></td><td>2</td><td>✅ 1 disque</td><td>Lecture rapide</td></tr>
+        <tr><td><span class="badge badge-purple">RAID-5</span></td><td>3–32</td><td>✅ 1 disque</td><td>✅ Bon</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Windows — DISKPART (ligne de commande)</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Lancer diskpart</span><br>
+        <span class="cmd">diskpart</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Lister et sélectionner</span><br>
+        <span class="cmd">list disk</span><br>
+        <span class="cmd">select disk 1</span><br>
+        <span class="cmd">list partition</span><br>
+        <span class="cmd">select partition 2</span><br>
+        <span class="cmd">list volume</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Créer une partition</span><br>
+        <span class="cmd">clean</span> <span class="comment">— efface le disque</span><br>
+        <span class="cmd">convert gpt</span> <span class="comment">— ou convert mbr</span><br>
+        <span class="cmd">create partition primary size=50000</span><br>
+        <span class="cmd">format fs=ntfs quick label="Data"</span><br>
+        <span class="cmd">assign letter=D</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Étendre / réduire un volume</span><br>
+        <span class="cmd">extend size=10000</span><br>
+        <span class="cmd">shrink desired=5000</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Marquer actif (MBR boot)</span><br>
+        <span class="cmd">active</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Windows — Gestion graphique & PowerShell</h3>
+      <div class="cmd-block"><span class="cmd">diskmgmt.msc</span> <span class="comment">— Gestionnaire de disques GUI</span></div>
+      <div class="cmd-block"><span class="cmd">Get-Disk</span> <span class="comment">— liste les disques (PowerShell)</span></div>
+      <div class="cmd-block"><span class="cmd">Get-Partition</span></div>
+      <div class="cmd-block"><span class="cmd">Get-Volume</span></div>
+      <div class="cmd-block"><span class="cmd">Initialize-Disk -Number 1 -PartitionStyle GPT</span></div>
+      <div class="cmd-block"><span class="cmd">New-Partition -DiskNumber 1 -UseMaximumSize -AssignDriveLetter</span></div>
+      <div class="cmd-block"><span class="cmd">Format-Volume -DriveLetter D -FileSystem NTFS -NewFileSystemLabel "Data"</span></div>
+      <div class="cmd-block"><span class="cmd">Resize-Partition -DriveLetter D -Size 50GB</span></div>
+      <div class="cmd-block"><span class="cmd">chkdsk D: /f /r /x</span> <span class="comment">— vérification + réparation</span></div>
+      <hr class="sep">
+      <h3>Systèmes de fichiers Windows</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>FS</th><th>Max fichier</th><th>Max volume</th><th>Usage</th></tr>
+        <tr><td><code>FAT32</code></td><td>4 Go</td><td>2 To</td><td>USB, compatibilité</td></tr>
+        <tr><td><code>exFAT</code></td><td>16 Eo</td><td>128 Po</td><td>USB grands fichiers</td></tr>
+        <tr><td><code>NTFS</code></td><td>16 To</td><td>256 To</td><td>Windows standard</td></tr>
+        <tr><td><code>ReFS</code></td><td>16 Eo</td><td>35 Po</td><td>Serveurs, résilience</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Linux — Partitionnement (fdisk / gdisk / parted)</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Lister les disques et partitions</span><br>
+        <span class="cmd">lsblk</span> <span class="comment">— arbre des blocs</span><br>
+        <span class="cmd">lsblk -f</span> <span class="comment">— avec systèmes de fichiers</span><br>
+        <span class="cmd">fdisk -l</span> <span class="comment">— détail de tous les disques</span><br>
+        <span class="cmd">blkid</span> <span class="comment">— UUID et types de FS</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Créer des partitions (fdisk — MBR)</span><br>
+        <span class="cmd">fdisk /dev/sdb</span><br>
+        <span class="comment"># n = nouvelle partition</span><br>
+        <span class="comment"># p = primaire | e = étendue</span><br>
+        <span class="comment"># d = supprimer | t = type</span><br>
+        <span class="comment"># w = écrire | q = quitter</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- gdisk (GPT)</span><br>
+        <span class="cmd">gdisk /dev/sdb</span><br>
+        <span class="comment"># n = nouvelle | d = supprimer | w = écrire</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Formater</span><br>
+        <span class="cmd">mkfs.ext4 /dev/sdb1</span><br>
+        <span class="cmd">mkfs.xfs /dev/sdb2</span><br>
+        <span class="cmd">mkswap /dev/sdb3</span> <span class="comment">— partition swap</span><br>
+        <span class="cmd">swapon /dev/sdb3</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Linux — Montage (mount / fstab)</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Monter manuellement</span><br>
+        <span class="cmd">mount /dev/sdb1 /mnt/data</span><br>
+        <span class="cmd">mount -t ext4 /dev/sdb1 /mnt/data</span><br>
+        <span class="cmd">umount /mnt/data</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Voir les points de montage</span><br>
+        <span class="cmd">df -h</span><br>
+        <span class="cmd">mount | column -t</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- /etc/fstab (montage automatique au boot)</span><br>
+        <span class="comment"># UUID=xxxx  /mnt/data  ext4  defaults  0  2</span><br>
+        <span class="comment"># device     point      fs    options   dump  pass</span><br>
+        <span class="cmd">UUID=$(blkid -s UUID -o value /dev/sdb1)</span><br>
+        <span class="cmd">mount -a</span> <span class="comment">— tester le fstab sans reboot</span>
+      </div>
+      <hr class="sep">
+      <h3>Systèmes de fichiers Linux</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>FS</th><th>Journalisé</th><th>Usage</th></tr>
+        <tr><td><code>ext4</code></td><td>✅</td><td>Standard Linux — polyvalent</td></tr>
+        <tr><td><code>xfs</code></td><td>✅</td><td>Hautes performances, RHEL</td></tr>
+        <tr><td><code>btrfs</code></td><td>✅</td><td>Snapshots, RAID intégré</td></tr>
+        <tr><td><code>tmpfs</code></td><td>—</td><td>RAM virtuelle (/tmp, /run)</td></tr>
+        <tr><td><code>vfat</code></td><td>❌</td><td>FAT32 (USB, /boot/efi)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Linux — LVM (Logical Volume Manager)</h3>
+      <div style="font-size:0.82rem; color:var(--muted); margin-bottom:0.75rem">LVM permet de gérer les disques de façon flexible : redimensionner à chaud, agréger plusieurs disques, snapshots.</div>
+      <div class="formula purple">PV → VG → LV → Système de fichiers</div>
+      <table style="margin-top:0.75rem; margin-bottom:0.75rem">
+        <tr><th>Terme</th><th>Rôle</th></tr>
+        <tr><td><code>PV</code> Physical Volume</td><td>Partition ou disque physique initialisé pour LVM</td></tr>
+        <tr><td><code>VG</code> Volume Group</td><td>Groupe de PV (pool de stockage)</td></tr>
+        <tr><td><code>LV</code> Logical Volume</td><td>Volume logique utilisable (= partition virtuelle)</td></tr>
+        <tr><td><code>PE</code> Physical Extent</td><td>Bloc de 4 Mo minimum (unité d'allocation LVM)</td></tr>
+      </table>
+      <div class="cmd-block">
+        <span class="comment">-- Créer un LVM depuis zéro</span><br>
+        <span class="cmd">pvcreate /dev/sdb /dev/sdc</span><br>
+        <span class="cmd">vgcreate vg_data /dev/sdb /dev/sdc</span><br>
+        <span class="cmd">lvcreate -L 50G -n lv_data vg_data</span><br>
+        <span class="cmd">mkfs.ext4 /dev/vg_data/lv_data</span><br>
+        <span class="cmd">mount /dev/vg_data/lv_data /mnt/data</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Étendre un LV</span><br>
+        <span class="cmd">lvextend -L +20G /dev/vg_data/lv_data</span><br>
+        <span class="cmd">resize2fs /dev/vg_data/lv_data</span> <span class="comment">— redim FS ext4</span><br>
+        <span class="cmd">xfs_growfs /mnt/data</span> <span class="comment">— redim FS xfs</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- État LVM</span><br>
+        <span class="cmd">pvdisplay | pvs</span><br>
+        <span class="cmd">vgdisplay | vgs</span><br>
+        <span class="cmd">lvdisplay | lvs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>RAID — Niveaux essentiels</h3>
+    <table style="margin-top:0.5rem">
+      <tr><th>RAID</th><th>Min disques</th><th>Tolérance panne</th><th>Capacité utile</th><th>Usage</th></tr>
+      <tr><td><span class="badge badge-red">RAID 0</span> Striping</td><td>2</td><td>❌ Aucune</td><td>100% (N × taille)</td><td>Performance pure</td></tr>
+      <tr><td><span class="badge badge-green">RAID 1</span> Mirroring</td><td>2</td><td>✅ N-1 disques</td><td>50% (taille d'1 disque)</td><td>Tolérance max</td></tr>
+      <tr><td><span class="badge badge-blue">RAID 5</span> Parité dist.</td><td>3</td><td>✅ 1 disque</td><td>(N-1)/N</td><td>Équilibre perfs/sécu</td></tr>
+      <tr><td><span class="badge badge-purple">RAID 6</span> Double parité</td><td>4</td><td>✅ 2 disques</td><td>(N-2)/N</td><td>Haute disponibilité</td></tr>
+      <tr><td><span class="badge badge-orange">RAID 10</span> (1+0)</td><td>4</td><td>✅ 1 par miroir</td><td>50%</td><td>Perfs + sécurité</td></tr>
+    </table>
+    <div style="margin-top:0.75rem; font-size:0.82rem; color:var(--muted)">⚠️ RAID ≠ Sauvegarde — Le RAID protège de la panne matérielle, pas de la suppression accidentelle ou du ransomware.</div>
+  </div>
+</div>
+
+<!-- ====== SCRIPTING ====== -->
+<div class="section" id="scripting">
+  <div class="section-title"><h2>Scripting — Bash & PowerShell</h2></div>
+
+  <div class="grid">
+    <div class="card green">
+      <h3>🐧 Bash — Structure d'un script</h3>
+      <div class="cmd-block">
+        <span class="comment">#!/bin/bash</span><br>
+        <span class="comment"># Description : Mon premier script</span><br>
+        <br>
+        <span class="comment"># Variables</span><br>
+        <span class="keyword">NOM</span>=<span style="color:var(--accent6)">"Alice"</span><br>
+        <span class="keyword">AGE</span>=<span style="color:var(--accent6)">30</span><br>
+        <span class="keyword">DATE</span>=$(<span class="cmd">date +%Y-%m-%d</span>)<br>
+        <br>
+        <span class="comment"># Affichage</span><br>
+        <span class="cmd">echo</span> <span style="color:var(--accent6)">"Bonjour $NOM, tu as $AGE ans"</span><br>
+        <span class="cmd">echo</span> <span style="color:var(--accent6)">"Date : $DATE"</span>
+      </div>
+      <hr class="sep">
+      <h3>Variables spéciales Bash</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Variable</th><th>Signification</th></tr>
+        <tr><td><code>$0</code></td><td>Nom du script</td></tr>
+        <tr><td><code>$1 … $9</code></td><td>Arguments positionnels</td></tr>
+        <tr><td><code>$#</code></td><td>Nombre d'arguments</td></tr>
+        <tr><td><code>$@</code></td><td>Tous les arguments</td></tr>
+        <tr><td><code>$?</code></td><td>Code retour dernière commande (0 = succès)</td></tr>
+        <tr><td><code>$$</code></td><td>PID du script en cours</td></tr>
+        <tr><td><code>$HOSTNAME</code></td><td>Nom de la machine</td></tr>
+        <tr><td><code>$USER</code></td><td>Utilisateur courant</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>🐧 Bash — Conditions et tests</h3>
+      <div class="cmd-block">
+        <span class="comment"># Structure if/elif/else</span><br>
+        <span class="keyword">if</span> [ <span class="keyword">$AGE</span> -ge 18 ]; <span class="keyword">then</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Majeur"</span><br>
+        <span class="keyword">elif</span> [ <span class="keyword">$AGE</span> -eq 17 ]; <span class="keyword">then</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Presque"</span><br>
+        <span class="keyword">else</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Mineur"</span><br>
+        <span class="keyword">fi</span>
+      </div>
+      <table style="margin-top:0.5rem; margin-bottom:0.75rem">
+        <tr><th>Opérateur</th><th>Numérique</th><th>Chaînes</th><th>Fichiers</th></tr>
+        <tr><td>Égal</td><td><code>-eq</code></td><td><code>=</code> ou <code>==</code></td><td>—</td></tr>
+        <tr><td>Différent</td><td><code>-ne</code></td><td><code>!=</code></td><td>—</td></tr>
+        <tr><td>Supérieur</td><td><code>-gt</code></td><td><code>&gt;</code></td><td>—</td></tr>
+        <tr><td>Inférieur</td><td><code>-lt</code></td><td><code>&lt;</code></td><td>—</td></tr>
+        <tr><td>Fichier existe</td><td>—</td><td>—</td><td><code>-f</code></td></tr>
+        <tr><td>Dossier existe</td><td>—</td><td>—</td><td><code>-d</code></td></tr>
+        <tr><td>Fichier non vide</td><td>—</td><td>—</td><td><code>-s</code></td></tr>
+      </table>
+      <div class="cmd-block">
+        <span class="comment"># Vérifier si un fichier existe</span><br>
+        <span class="keyword">if</span> [ -f <span style="color:var(--accent6)">"/etc/passwd"</span> ]; <span class="keyword">then</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Fichier trouvé"</span><br>
+        <span class="keyword">fi</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>🐧 Bash — Boucles</h3>
+      <div class="cmd-block">
+        <span class="comment"># Boucle for</span><br>
+        <span class="keyword">for</span> i <span class="keyword">in</span> 1 2 3 4 5; <span class="keyword">do</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Valeur : $i"</span><br>
+        <span class="keyword">done</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Boucle for (séquence)</span><br>
+        <span class="keyword">for</span> i <span class="keyword">in</span> $(<span class="cmd">seq</span> 1 10); <span class="keyword">do</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"$i"</span><br>
+        <span class="keyword">done</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Boucle while</span><br>
+        <span class="keyword">COMPTEUR</span>=0<br>
+        <span class="keyword">while</span> [ <span class="keyword">$COMPTEUR</span> -lt 5 ]; <span class="keyword">do</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Compteur : $COMPTEUR"</span><br>
+        &nbsp;&nbsp;<span class="keyword">COMPTEUR</span>=$((<span class="keyword">COMPTEUR</span>+1))<br>
+        <span class="keyword">done</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Parcourir des fichiers</span><br>
+        <span class="keyword">for</span> fichier <span class="keyword">in</span> /var/log/*.log; <span class="keyword">do</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Fichier : $fichier"</span><br>
+        <span class="keyword">done</span>
+      </div>
+      <hr class="sep">
+      <h3>🐧 Bash — Fonctions</h3>
+      <div class="cmd-block">
+        <span class="keyword">function</span> <span class="cmd">saluer</span>() {<br>
+        &nbsp;&nbsp;<span class="keyword">local</span> NOM=$1<br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Bonjour $NOM !"</span><br>
+        }<br>
+        <span class="comment"># Appel</span><br>
+        <span class="cmd">saluer</span> <span style="color:var(--accent6)">"Bob"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🐧 Bash — Scripts pratiques TSSR</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Vérifier si un service tourne</span><br>
+        <span class="keyword">SERVICE</span>=<span style="color:var(--accent6)">"apache2"</span><br>
+        <span class="keyword">if</span> <span class="cmd">systemctl is-active</span> --quiet <span class="keyword">$SERVICE</span>; <span class="keyword">then</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"$SERVICE est actif"</span><br>
+        <span class="keyword">else</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"$SERVICE est inactif"</span><br>
+        &nbsp;&nbsp;<span class="cmd">systemctl start</span> <span class="keyword">$SERVICE</span><br>
+        <span class="keyword">fi</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Test de connectivité ping</span><br>
+        <span class="keyword">CIBLE</span>=<span style="color:var(--accent6)">"8.8.8.8"</span><br>
+        <span class="keyword">if</span> <span class="cmd">ping</span> -c 1 <span class="keyword">$CIBLE</span> &amp;> /dev/null; <span class="keyword">then</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"$CIBLE : accessible"</span><br>
+        <span class="keyword">else</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"$CIBLE : inaccessible"</span><br>
+        <span class="keyword">fi</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Sauvegarde avec date</span><br>
+        <span class="keyword">SRC</span>=<span style="color:var(--accent6)">"/etc"</span><br>
+        <span class="keyword">DEST</span>=<span style="color:var(--accent6)">"/backup/etc_$(date +%Y%m%d).tar.gz"</span><br>
+        <span class="cmd">tar</span> -czf <span class="keyword">$DEST</span> <span class="keyword">$SRC</span><br>
+        <span class="cmd">echo</span> <span style="color:var(--accent6)">"Sauvegarde créée : $DEST"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Créer des comptes depuis un fichier CSV</span><br>
+        <span class="keyword">while</span> IFS=, <span class="cmd">read</span> login nom; <span class="keyword">do</span><br>
+        &nbsp;&nbsp;<span class="cmd">useradd</span> -m -c <span style="color:var(--accent6)">"$nom"</span> <span style="color:var(--accent6)">"$login"</span><br>
+        &nbsp;&nbsp;<span class="cmd">echo</span> <span style="color:var(--accent6)">"Compte créé : $login"</span><br>
+        <span class="keyword">done</span> &lt; utilisateurs.csv
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>⚡ PowerShell — Bases</h3>
+      <div class="cmd-block">
+        <span class="comment"># Variables</span><br>
+        <span class="keyword">$Nom</span> = <span style="color:var(--accent6)">"Alice"</span><br>
+        <span class="keyword">$Age</span> = 30<br>
+        <span class="keyword">$Date</span> = <span class="cmd">Get-Date</span><br>
+        <span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Bonjour $Nom, tu as $Age ans"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Types de données courants</span><br>
+        <span class="keyword">[string]</span><span class="keyword">$texte</span> = <span style="color:var(--accent6)">"hello"</span><br>
+        <span class="keyword">[int]</span><span class="keyword">$nombre</span> = 42<br>
+        <span class="keyword">[bool]</span><span class="keyword">$actif</span> = <span class="keyword">$true</span><br>
+        <span class="keyword">[array]</span><span class="keyword">$liste</span> = @(<span style="color:var(--accent6)">"a"</span>,<span style="color:var(--accent6)">"b"</span>,<span style="color:var(--accent6)">"c"</span>)<br>
+        <span class="keyword">$hash</span> = @{Cle=<span style="color:var(--accent6)">"Valeur"</span>; Port=80}
+      </div>
+      <hr class="sep">
+      <h3>Cmdlets essentielles</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Cmdlet</th><th>Action</th></tr>
+        <tr><td><code>Get-Help cmd</code></td><td>Aide sur une commande</td></tr>
+        <tr><td><code>Get-Command *service*</code></td><td>Rechercher des cmdlets</td></tr>
+        <tr><td><code>Get-Member</code></td><td>Propriétés et méthodes d'un objet</td></tr>
+        <tr><td><code>Select-Object</code></td><td>Sélectionner des propriétés</td></tr>
+        <tr><td><code>Where-Object</code></td><td>Filtrer des objets</td></tr>
+        <tr><td><code>Sort-Object</code></td><td>Trier des objets</td></tr>
+        <tr><td><code>Format-Table / Format-List</code></td><td>Afficher en tableau / liste</td></tr>
+        <tr><td><code>Export-Csv / Import-Csv</code></td><td>Export/Import CSV</td></tr>
+        <tr><td><code>Out-File</code></td><td>Écrire dans un fichier</td></tr>
+        <tr><td><code>Invoke-Command</code></td><td>Exécuter sur machine distante</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>⚡ PowerShell — Conditions & Boucles</h3>
+      <div class="cmd-block">
+        <span class="comment"># If / ElseIf / Else</span><br>
+        <span class="keyword">if</span> (<span class="keyword">$Age</span> -ge 18) {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Majeur"</span><br>
+        } <span class="keyword">elseif</span> (<span class="keyword">$Age</span> -eq 17) {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Presque"</span><br>
+        } <span class="keyword">else</span> {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Mineur"</span><br>
+        }
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Opérateurs de comparaison PS</span><br>
+        <span class="comment"># -eq -ne -gt -lt -ge -le</span><br>
+        <span class="comment"># -like "*motif*" | -match "regex"</span><br>
+        <span class="comment"># -and -or -not</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Boucle foreach</span><br>
+        <span class="keyword">foreach</span> (<span class="keyword">$item</span> <span class="keyword">in</span> <span class="keyword">$liste</span>) {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span class="keyword">$item</span><br>
+        }
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># ForEach-Object (pipeline)</span><br>
+        <span class="cmd">Get-Service</span> | <span class="cmd">ForEach-Object</span> {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span class="keyword">$_.Name</span> <span class="keyword">$_.Status</span><br>
+        }
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Where-Object (filtre)</span><br>
+        <span class="cmd">Get-Service</span> | <span class="cmd">Where-Object</span> { <span class="keyword">$_.Status</span> -eq <span style="color:var(--accent6)">"Running"</span> }
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># For / While</span><br>
+        <span class="keyword">for</span> (<span class="keyword">$i</span>=0; <span class="keyword">$i</span> -lt 5; <span class="keyword">$i</span>++) { <span class="cmd">Write-Host</span> <span class="keyword">$i</span> }<br>
+        <span class="keyword">while</span> (<span class="keyword">$i</span> -lt 10) { <span class="keyword">$i</span>++ }
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>⚡ PowerShell — Fonctions & Modules</h3>
+      <div class="cmd-block">
+        <span class="comment"># Déclaration d'une fonction</span><br>
+        <span class="keyword">function</span> <span class="cmd">Get-InfoPoste</span> {<br>
+        &nbsp;&nbsp;<span class="keyword">param</span>(<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">[string]</span><span class="keyword">$NomPC</span> = <span class="keyword">$env:COMPUTERNAME</span><br>
+        &nbsp;&nbsp;)<br>
+        &nbsp;&nbsp;<span class="keyword">$info</span> = <span class="cmd">Get-ComputerInfo</span> -ComputerName <span class="keyword">$NomPC</span><br>
+        &nbsp;&nbsp;<span class="cmd">return</span> <span class="keyword">$info</span><br>
+        }<br>
+        <span class="comment"># Appel</span><br>
+        <span class="cmd">Get-InfoPoste</span> -NomPC <span style="color:var(--accent6)">"PC-ALICE"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Gestion des modules</span><br>
+        <span class="cmd">Get-Module</span> -ListAvailable<br>
+        <span class="cmd">Import-Module</span> ActiveDirectory<br>
+        <span class="cmd">Install-Module</span> -Name Az -Scope CurrentUser
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Try / Catch / Finally</span><br>
+        <span class="keyword">try</span> {<br>
+        &nbsp;&nbsp;<span class="cmd">Get-ADUser</span> -Identity <span style="color:var(--accent6)">"inconnu"</span><br>
+        } <span class="keyword">catch</span> {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Erreur : $($_.Exception.Message)"</span><br>
+        } <span class="keyword">finally</span> {<br>
+        &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Terminé"</span><br>
+        }
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚡ PowerShell — Scripts AD pratiques</h3>
+      <div class="cmd-block">
+        <span class="comment">-- Créer des utilisateurs depuis CSV</span><br>
+        <span class="keyword">$users</span> = <span class="cmd">Import-Csv</span> <span style="color:var(--accent6)">"C:\users.csv"</span><br>
+        <span class="keyword">foreach</span> (<span class="keyword">$u</span> <span class="keyword">in</span> <span class="keyword">$users</span>) {<br>
+        &nbsp;&nbsp;<span class="cmd">New-ADUser</span> \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;-Name <span class="keyword">$u.Nom</span> \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;-SamAccountName <span class="keyword">$u.Login</span> \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;-Path <span style="color:var(--accent6)">"OU=Utilisateurs,DC=dom,DC=local"</span> \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;-AccountPassword (<span class="cmd">ConvertTo-SecureString</span> <span style="color:var(--accent6)">"P@ss!"</span> -AsPlainText -Force) \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;-Enabled <span class="keyword">$true</span><br>
+        }
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Rapport comptes désactivés</span><br>
+        <span class="cmd">Search-ADAccount</span> -AccountDisabled -UsersOnly |<br>
+        &nbsp;&nbsp;<span class="cmd">Select-Object</span> Name,SamAccountName,LastLogonDate |<br>
+        &nbsp;&nbsp;<span class="cmd">Export-Csv</span> <span style="color:var(--accent6)">"C:\desactives.csv"</span> -NoTypeInformation
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- Comptes inactifs depuis 90 jours</span><br>
+        <span class="keyword">$date</span> = (<span class="cmd">Get-Date</span>).AddDays(-90)<br>
+        <span class="cmd">Get-ADUser</span> -Filter {LastLogonDate -lt <span class="keyword">$date</span>} \<br>
+        &nbsp;&nbsp;-Properties LastLogonDate |<br>
+        &nbsp;&nbsp;<span class="cmd">Select-Object</span> Name,LastLogonDate
+      </div>
+      <div class="cmd-block">
+        <span class="comment">-- État des services sur machines distantes</span><br>
+        <span class="keyword">$pcs</span> = @(<span style="color:var(--accent6)">"PC01"</span>,<span style="color:var(--accent6)">"PC02"</span>,<span style="color:var(--accent6)">"PC03"</span>)<br>
+        <span class="cmd">Invoke-Command</span> -ComputerName <span class="keyword">$pcs</span> {<br>
+        &nbsp;&nbsp;<span class="cmd">Get-Service</span> -Name <span style="color:var(--accent6)">"wuauserv"</span><br>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ====== SECU ====== -->
 <div class="section" id="secu">
   <div class="section-title"><h2>Sécurité</h2></div>
-
   <div class="grid">
     <div class="card">
       <h3>Types d'attaques à connaître</h3>
@@ -708,7 +1542,6 @@
         <tr><td><span class="badge badge-red">Keylogger</span></td><td>Enregistre les frappes clavier</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h3>Chiffrement — Concepts clés</h3>
       <table style="margin-top:0.5rem">
@@ -729,7 +1562,6 @@
       </table>
     </div>
   </div>
-
   <div class="grid">
     <div class="card">
       <h3>PKI & Certificats</h3>
@@ -753,7 +1585,6 @@
         <tr><td>SSL/TLS VPN</td><td>443 TCP</td><td style="color:var(--accent2)">Fort</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h3>Pare-feu & ACL</h3>
       <ul style="margin-top:0.5rem">
@@ -785,7 +1616,6 @@
 <!-- ====== VIRT ====== -->
 <div class="section" id="virt">
   <div class="section-title"><h2>Virtualisation & Cloud</h2></div>
-
   <div class="grid">
     <div class="card">
       <h3>Hyperviseurs</h3>
@@ -808,7 +1638,6 @@
         <tr><td><code>Template</code></td><td>VM modèle pour déploiement rapide</td></tr>
       </table>
     </div>
-
     <div class="card">
       <h3>Hyper-V (Windows Server)</h3>
       <ul style="margin-top:0.5rem">
@@ -837,7 +1666,6 @@
       </ul>
     </div>
   </div>
-
   <div class="card">
     <h3>Conteneurisation (Docker)</h3>
     <div class="two-col">
@@ -861,10 +1689,165 @@
   </div>
 </div>
 
+<!-- ====== ITIL & GLPI ====== -->
+<div class="section" id="itil">
+  <div class="section-title"><h2>ITIL v4 & GLPI — Gestion des services IT</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>ITIL v4 — Concepts fondamentaux</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Terme</th><th>Définition</th></tr>
+        <tr><td><code>Service</code></td><td>Moyen permettant la co-création de valeur en facilitant les résultats souhaités</td></tr>
+        <tr><td><code>Valeur</code></td><td>Bénéfices perçus par le client − coûts/risques</td></tr>
+        <tr><td><code>SVS</code></td><td>Service Value System = cadre global ITIL v4</td></tr>
+        <tr><td><code>SVC</code></td><td>Service Value Chain = chaîne de valeur des services</td></tr>
+        <tr><td><code>SLA</code></td><td>Service Level Agreement = accord sur le niveau de service</td></tr>
+        <tr><td><code>OLA</code></td><td>Operational Level Agreement = accord interne entre équipes</td></tr>
+        <tr><td><code>KPI</code></td><td>Key Performance Indicator = indicateur de performance</td></tr>
+        <tr><td><code>CI</code></td><td>Configuration Item = élément de configuration</td></tr>
+        <tr><td><code>CMDB</code></td><td>Configuration Management Database</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Les 4 dimensions ITIL v4</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:var(--accent6)">1. Organisations et personnes</strong> — Rôles, compétences, culture</li>
+        <li><strong style="color:var(--accent2)">2. Information et technologie</strong> — Données, outils, automatisation</li>
+        <li><strong style="color:var(--accent4)">3. Partenaires et fournisseurs</strong> — Contrats, sous-traitance</li>
+        <li><strong style="color:var(--accent3)">4. Flux de valeur et processus</strong> — Comment le travail est organisé</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>ITIL v4 — Les 7 principes directeurs</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>#</th><th>Principe</th><th>Essence</th></tr>
+        <tr><td><span class="badge badge-blue">1</span></td><td>Se concentrer sur la valeur</td><td>Tout doit apporter de la valeur au client</td></tr>
+        <tr><td><span class="badge badge-green">2</span></td><td>Commencer là où on en est</td><td>Réutiliser l'existant, ne pas tout refaire</td></tr>
+        <tr><td><span class="badge badge-orange">3</span></td><td>Progresser par itérations</td><td>Petites étapes avec feedback continu</td></tr>
+        <tr><td><span class="badge badge-purple">4</span></td><td>Collaborer et promouvoir la visibilité</td><td>Transparence et travail en équipe</td></tr>
+        <tr><td><span class="badge badge-red">5</span></td><td>Penser et travailler de façon holistique</td><td>Vision globale du système</td></tr>
+        <tr><td><span class="badge badge-teal">6</span></td><td>Rester simple et pratique</td><td>Éliminer ce qui n'apporte pas de valeur</td></tr>
+        <tr><td><span class="badge badge-blue">7</span></td><td>Optimiser et automatiser</td><td>Réduire les interventions manuelles</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Pratiques ITIL v4 — Les principales</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Pratique</th><th>Rôle</th></tr>
+        <tr><td><span class="badge badge-red">Gestion des incidents</span></td><td>Restaurer rapidement le service normal après une interruption</td></tr>
+        <tr><td><span class="badge badge-orange">Gestion des problèmes</span></td><td>Identifier et éliminer les causes racines des incidents récurrents</td></tr>
+        <tr><td><span class="badge badge-blue">Gestion des changements</span></td><td>Contrôler les modifications pour minimiser les risques</td></tr>
+        <tr><td><span class="badge badge-green">Centre de services (Service Desk)</span></td><td>Point de contact unique entre IT et utilisateurs</td></tr>
+        <tr><td><span class="badge badge-purple">Gestion des demandes</span></td><td>Traiter les demandes standard (accès, matériel…)</td></tr>
+        <tr><td><span class="badge badge-teal">Gestion des actifs IT</span></td><td>Inventaire et cycle de vie des équipements</td></tr>
+        <tr><td><span class="badge badge-blue">Gestion des configurations</span></td><td>Maintenir la CMDB à jour</td></tr>
+        <tr><td><span class="badge badge-orange">Gestion des niveaux de service</span></td><td>Définir, surveiller et rapporter les SLA</td></tr>
+        <tr><td><span class="badge badge-green">Gestion des connaissances</span></td><td>Partage et capitalisation des savoirs (base de connaissances)</td></tr>
+        <tr><td><span class="badge badge-red">Gestion des mises en production</span></td><td>Déployer les changements validés en production</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Incident vs Problème vs Changement</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Définition</th><th>Exemple</th></tr>
+        <tr>
+          <td><span class="badge badge-red">Incident</span></td>
+          <td>Interruption non planifiée ou dégradation d'un service</td>
+          <td>Imprimante qui ne répond plus, VPN déconnecté</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-orange">Problème</span></td>
+          <td>Cause sous-jacente d'un ou plusieurs incidents</td>
+          <td>Pilote défaillant causant des plantages répétés</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">Changement</span></td>
+          <td>Modification d'un élément de l'infrastructure</td>
+          <td>Mise à jour Windows, ajout d'un VLAN</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">Demande</span></td>
+          <td>Demande formelle d'un service standard</td>
+          <td>Nouveau compte AD, installation logiciel</td>
+        </tr>
+      </table>
+      <hr class="sep">
+      <h3>Priorité des tickets (matrice Impact × Urgence)</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Impact \ Urgence</th><th>Élevée</th><th>Moyenne</th><th>Faible</th></tr>
+        <tr><td><strong>Élevé</strong></td><td style="background:#2d0a0a;color:var(--accent5)">P1 — Critique</td><td style="background:#2d1e0a;color:var(--accent4)">P2 — Haute</td><td style="background:#2d1e0a;color:var(--accent4)">P3 — Moyenne</td></tr>
+        <tr><td><strong>Moyen</strong></td><td style="background:#2d1e0a;color:var(--accent4)">P2 — Haute</td><td style="background:#2d1e0a;color:var(--accent4)">P3 — Moyenne</td><td style="background:#0d2d1a;color:var(--accent2)">P4 — Basse</td></tr>
+        <tr><td><strong>Faible</strong></td><td style="background:#2d1e0a;color:var(--accent4)">P3 — Moyenne</td><td style="background:#0d2d1a;color:var(--accent2)">P4 — Basse</td><td style="background:#0d2d1a;color:var(--accent2)">P5 — Planifiée</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card teal">
+      <h3>GLPI — Présentation</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:#1abc9c">GLPI</strong> = Gestionnaire Libre de Parc Informatique (logiciel open-source)</li>
+        <li>Outil ITSM (IT Service Management) conforme ITIL</li>
+        <li>Modules principaux : <strong>Assistance, Parc, Gestion, Outils, Administration</strong></li>
+        <li>Intégration LDAP/AD pour authentification des utilisateurs</li>
+        <li>Plugin <strong>FusionInventory</strong> pour l'inventaire automatique</li>
+        <li>Base de données : MySQL / MariaDB</li>
+        <li>Interface web (Apache + PHP)</li>
+      </ul>
+      <hr class="sep">
+      <h3>Rôles utilisateurs GLPI</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Rôle</th><th>Droits</th></tr>
+        <tr><td><span class="badge badge-red">Super-admin</span></td><td>Accès total, configuration globale</td></tr>
+        <tr><td><span class="badge badge-orange">Admin</span></td><td>Gestion du parc et des tickets, entités limitées</td></tr>
+        <tr><td><span class="badge badge-blue">Technicien</span></td><td>Traitement des tickets, consultation du parc</td></tr>
+        <tr><td><span class="badge badge-green">Observateur</span></td><td>Lecture seule</td></tr>
+        <tr><td><span class="badge" style="background:#1a2a1a;color:#1abc9c;border:1px solid #1abc9c">Utilisateur final</span></td><td>Créer ses propres tickets, suivi</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>GLPI — Gestion des tickets</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Statut</th><th>Signification</th></tr>
+        <tr><td><span class="badge badge-blue">Nouveau</span></td><td>Ticket créé, non attribué</td></tr>
+        <tr><td><span class="badge badge-orange">En cours (attribué)</span></td><td>Attribué à un technicien</td></tr>
+        <tr><td><span class="badge badge-orange">En cours (planifié)</span></td><td>Intervention planifiée</td></tr>
+        <tr><td><span class="badge badge-purple">En attente</span></td><td>Bloqué (attente info, pièce…)</td></tr>
+        <tr><td><span class="badge badge-green">Résolu</span></td><td>Solution proposée, attente validation</td></tr>
+        <tr><td><span class="badge badge-green">Clos</span></td><td>Validé par le demandeur ou auto-clôture</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>GLPI — Modules clés</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Module</th><th>Contenu</th></tr>
+        <tr><td><strong style="color:var(--accent6)">Assistance</strong></td><td>Tickets, problèmes, changements, planification</td></tr>
+        <tr><td><strong style="color:var(--accent2)">Parc</strong></td><td>Ordinateurs, écrans, imprimantes, réseau, logiciels</td></tr>
+        <tr><td><strong style="color:var(--accent4)">Gestion</strong></td><td>Contrats, budgets, fournisseurs, documents</td></tr>
+        <tr><td><strong style="color:var(--accent3)">Outils</strong></td><td>Base de connaissances, FAQ, notes, agenda, réservations</td></tr>
+        <tr><td><strong style="color:var(--muted)">Administration</strong></td><td>Utilisateurs, entités, règles, authentification LDAP</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>GLPI — Cycle d'un ticket incident</h3>
+      <div class="formula">Ouverture → Attribution → Diagnostic → Résolution → Validation → Clôture</div>
+      <ul style="margin-top:0.5rem; font-size:0.82rem">
+        <li><strong>SLA</strong> : GLPI gère les délais de prise en charge et de résolution automatiquement</li>
+        <li><strong>Escalade</strong> : passage automatique au niveau supérieur si SLA dépassé</li>
+        <li><strong>Notification</strong> : e-mails automatiques à chaque changement de statut</li>
+        <li><strong>Base de connaissances</strong> : documenter les solutions pour les incidents récurrents</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <!-- ====== RECAP ====== -->
 <div class="section" id="recap">
   <div class="section-title"><h2>Récapitulatif mémo — À retenir absolument</h2></div>
-
   <div class="grid-3">
     <div class="card green">
       <h3>🔢 Nombres clés</h3>
@@ -877,9 +1860,10 @@
         <tr><td>Rôles FSMO</td><td><span class="big">5</span></td></tr>
         <tr><td>Max hôtes /24</td><td><span class="big">254</span></td></tr>
         <tr><td>Max ports TCP/UDP</td><td><span class="big">65535</span></td></tr>
+        <tr><td>Principes ITIL v4</td><td><span class="big">7</span></td></tr>
+        <tr><td>Dimensions ITIL v4</td><td><span class="big">4</span></td></tr>
       </table>
     </div>
-
     <div class="card blue">
       <h3>📡 Ports critiques</h3>
       <table style="margin-top:0.5rem">
@@ -895,7 +1879,6 @@
         <tr><td><code>3389</code></td><td>RDP</td></tr>
       </table>
     </div>
-
     <div class="card purple">
       <h3>🗝️ Acronymes essentiels</h3>
       <table style="margin-top:0.5rem">
@@ -909,10 +1892,13 @@
         <tr><td><code>SNMP</code></td><td>Simple Network Management Protocol</td></tr>
         <tr><td><code>NTP</code></td><td>Network Time Protocol</td></tr>
         <tr><td><code>FQDN</code></td><td>Fully Qualified Domain Name</td></tr>
+        <tr><td><code>LVM</code></td><td>Logical Volume Manager</td></tr>
+        <tr><td><code>ITIL</code></td><td>IT Infrastructure Library</td></tr>
+        <tr><td><code>CMDB</code></td><td>Config Management Database</td></tr>
+        <tr><td><code>AGDLP</code></td><td>Accounts Global DomainLocal Permissions</td></tr>
       </table>
     </div>
   </div>
-
   <div class="grid">
     <div class="card orange">
       <h3>⚡ Formules mémo rapide</h3>
@@ -926,8 +1912,11 @@
       <div class="formula">AD groupes AGDLP : Accounts → Global → DomLocal → Perms</div>
       <div class="formula">AAA = Authentication + Authorization + Accounting</div>
       <div class="formula">CIA = Confidentialité + Intégrité + Disponibilité</div>
+      <div class="formula">LVM : PV → VG → LV → mkfs → mount</div>
+      <div class="formula">RAID-5 utile = (N-1) × taille_disque</div>
+      <div class="formula">Cisco modes : User > Enable > Conf t > Interface</div>
+      <div class="formula">ITIL Incident ≠ Problème ≠ Changement ≠ Demande</div>
     </div>
-
     <div class="card red">
       <h3>⚠️ Pièges courants</h3>
       <ul style="margin-top:0.5rem">
@@ -944,6 +1933,13 @@
         <li>OSPF utilise la <strong>bande passante</strong> comme métrique (pas les sauts)</li>
         <li>RIP est limité à <strong>15 sauts</strong> maximum</li>
         <li>La Distance Administrative la plus <strong>basse</strong> est la plus prioritaire</li>
+        <li>AGDLP : on donne les permissions au groupe <strong>DomainLocal</strong>, pas au Global</li>
+        <li>GPO <strong>Enforced</strong> = prioritaire même contre Block Inheritance</li>
+        <li>RAID <strong>≠ Sauvegarde</strong> (ne protège pas contre effacement/ransomware)</li>
+        <li>Cisco <code>conf t</code> = configuration globale, pas interface directement</li>
+        <li>Cisco ACL standard → placer près de la <strong>destination</strong></li>
+        <li>ITIL v4 : <strong>Incident</strong> = symptôme, <strong>Problème</strong> = cause racine</li>
+        <li>LVM : <code>resize2fs</code> pour ext4, <code>xfs_growfs</code> pour XFS</li>
       </ul>
     </div>
   </div>
@@ -952,12 +1948,12 @@
 </div><!-- end .content -->
 
 <script>
+const sections = ['osi','ports','ip','routage','cisco','ad','gpo','windows','linux','disques','scripting','secu','virt','itil','recap'];
 function show(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   const btns = document.querySelectorAll('nav button');
-  const sections = ['osi','ports','ip','routage','ad','windows','linux','secu','virt','recap'];
   btns[sections.indexOf(id)].classList.add('active');
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
