@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fiche Révision TSSR</title>
+<title>Fiches TSSR  Par François Le Nader </title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -196,6 +196,11 @@
   <button onclick="show('secu')">Sécurité</button>
   <button onclick="show('virt')">Virtualisation</button>
   <button onclick="show('itil')">ITIL & GLPI</button>
+  <button onclick="show('sauvegarde')">Sauvegarde & PRA</button>
+  <button onclick="show('supervision')">Supervision</button>
+  <button onclick="show('messagerie')">Messagerie</button>
+  <button onclick="show('srvwin')">Services Windows</button>
+  <button onclick="show('infra')">Infra physique</button>
   <button onclick="show('recap')">Récap mémo</button>
 </nav>
 
@@ -2276,6 +2281,621 @@
   </div>
 </div>
 
+<!-- ====== SAUVEGARDE & PRA ====== -->
+<div class="section" id="sauvegarde">
+  <div class="section-title"><h2>Sauvegarde & PRA/PCA</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>Règle 3-2-1 — Standard de sauvegarde</h3>
+      <div style="display:flex;gap:1rem;margin:0.75rem 0;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px;background:#0c1d40;border:1px solid #1f6feb;border-radius:8px;padding:0.75rem;text-align:center">
+          <div style="font-size:2rem;font-weight:700;color:var(--accent6)">3</div>
+          <div style="font-size:0.78rem;color:var(--muted)">copies des données</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#0d2d1a;border:1px solid #238636;border-radius:8px;padding:0.75rem;text-align:center">
+          <div style="font-size:2rem;font-weight:700;color:var(--accent2)">2</div>
+          <div style="font-size:0.78rem;color:var(--muted)">supports différents</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:#2d1e0a;border:1px solid #9a6700;border-radius:8px;padding:0.75rem;text-align:center">
+          <div style="font-size:2rem;font-weight:700;color:var(--accent4)">1</div>
+          <div style="font-size:0.78rem;color:var(--muted)">copie hors site</div>
+        </div>
+      </div>
+      <hr class="sep">
+      <h3>Types de sauvegardes</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Sauvegarde</th><th>Restauration</th><th>Bit archive</th></tr>
+        <tr><td><span class="badge badge-blue">Complète</span></td><td>Tout — lent</td><td>Rapide (1 jeu)</td><td>Remis à 0</td></tr>
+        <tr><td><span class="badge badge-green">Incrémentale</span></td><td>Modifs depuis dernière sauveg.</td><td>Lente (chaîne)</td><td>Remis à 0</td></tr>
+        <tr><td><span class="badge badge-orange">Différentielle</span></td><td>Modifs depuis dernière complète</td><td>Moyenne (2 jeux)</td><td>Non remis</td></tr>
+        <tr><td><span class="badge badge-purple">Miroir</span></td><td>Copie exacte temps réel</td><td>Rapide</td><td>—</td></tr>
+      </table>
+      <div class="formula">Restauration incrémentale : complète + chaque incrément dans l'ordre</div>
+      <div class="formula">Restauration différentielle : complète + dernier différentiel seulement</div>
+    </div>
+
+    <div class="card">
+      <h3>PRA / PCA — Définitions</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Terme</th><th>Définition</th></tr>
+        <tr><td><span class="badge badge-red">PRA</span></td><td><strong>Plan de Reprise d'Activité</strong> — procédures pour redémarrer après sinistre</td></tr>
+        <tr><td><span class="badge badge-green">PCA</span></td><td><strong>Plan de Continuité d'Activité</strong> — maintien du service pendant la crise</td></tr>
+        <tr><td><span class="badge badge-orange">RPO</span></td><td><strong>Recovery Point Objective</strong> — perte de données maximale acceptable</td></tr>
+        <tr><td><span class="badge badge-blue">RTO</span></td><td><strong>Recovery Time Objective</strong> — durée max de restauration acceptable</td></tr>
+        <tr><td><span class="badge badge-purple">MTTR</span></td><td><strong>Mean Time To Repair</strong> — temps moyen de réparation</td></tr>
+        <tr><td><span class="badge badge-teal">MTBF</span></td><td><strong>Mean Time Between Failures</strong> — temps moyen entre pannes</td></tr>
+      </table>
+      <div class="formula orange">RPO = combien de données peut-on perdre ? (ex: 4h → sauvegarde toutes les 4h)</div>
+      <div class="formula green">RTO = combien de temps peut-on rester en panne ? (ex: 2h max)</div>
+      <hr class="sep">
+      <h3>Niveaux de disponibilité</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Nines</th><th>Disponibilité</th><th>Indisponibilité/an</th></tr>
+        <tr><td>2 nines</td><td>99 %</td><td>~3,65 jours</td></tr>
+        <tr><td>3 nines</td><td>99,9 %</td><td>~8,76 heures</td></tr>
+        <tr><td>4 nines</td><td>99,99 %</td><td>~52 minutes</td></tr>
+        <tr><td>5 nines</td><td>99,999 %</td><td>~5 minutes</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Windows — VSS & Windows Server Backup</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem"><strong>VSS</strong> (Volume Shadow Copy Service) = clichés instantanés cohérents sans interrompre les services.</p>
+      <div class="cmd-block">
+        <span class="comment"># Gérer les clichés VSS</span><br>
+        <span class="cmd">vssadmin list shadows</span> <span class="comment">— lister les clichés</span><br>
+        <span class="cmd">vssadmin list shadowstorage</span> <span class="comment">— espace utilisé</span><br>
+        <span class="cmd">vssadmin create shadow /for=C:</span><br>
+        <span class="cmd">vssadmin delete shadows /all /quiet</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Windows Server Backup (PowerShell)</span><br>
+        <span class="cmd">Add-WindowsFeature</span> Windows-Server-Backup<br>
+        <span class="cmd">Get-WBJob</span> <span class="comment">— tâches de sauvegarde</span><br>
+        <span class="cmd">Get-WBPolicy</span> <span class="comment">— politique active</span><br>
+        <span class="keyword">$policy</span> = <span class="cmd">New-WBPolicy</span><br>
+        <span class="cmd">Add-WBVolume</span> -Policy <span class="keyword">$policy</span> -Volume (<span class="cmd">Get-WBVolume</span> -VolumePath <span style="color:var(--accent6)">"C:"</span>)<br>
+        <span class="cmd">Set-WBSchedule</span> -Policy <span class="keyword">$policy</span> -Schedule 22:00<br>
+        <span class="cmd">Set-WBPolicy</span> -Policy <span class="keyword">$policy</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Restauration depuis cliché (Previous Versions)</span><br>
+        <span class="cmd">wbadmin get versions</span><br>
+        <span class="cmd">wbadmin start recovery -version:&lt;id&gt; -itemType:File -items:"C:\Data"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Linux — rsync & tar</h3>
+      <div class="cmd-block">
+        <span class="comment"># rsync — synchronisation incrémentale</span><br>
+        <span class="cmd">rsync</span> -avz /data/ /backup/data/ <span class="comment">— local</span><br>
+        <span class="cmd">rsync</span> -avz /data/ user@srv:/backup/ <span class="comment">— distant SSH</span><br>
+        <span class="cmd">rsync</span> -avz --delete /data/ /backup/ <span class="comment">— miroir exact</span><br>
+        <span class="cmd">rsync</span> -avz --exclude=<span style="color:var(--accent6)">"*.tmp"</span> /data/ /backup/
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># tar — archivage</span><br>
+        <span class="cmd">tar</span> -czf backup_$(date +%F).tar.gz /data/ <span class="comment">— créer</span><br>
+        <span class="cmd">tar</span> -xzf backup.tar.gz -C /restore/ <span class="comment">— extraire</span><br>
+        <span class="cmd">tar</span> -tzf backup.tar.gz <span class="comment">— lister le contenu</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Script sauvegarde automatique (cron)</span><br>
+        <span class="comment"># crontab -e</span><br>
+        <span class="comment"># 0 2 * * * /bin/bash /scripts/sauvegarde.sh</span><br>
+        <span class="comment"># └─ tous les jours à 02h00</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># dd — image disque bas niveau</span><br>
+        <span class="cmd">dd</span> if=/dev/sda of=/backup/sda.img bs=4M status=progress<br>
+        <span class="cmd">dd</span> if=/backup/sda.img of=/dev/sda bs=4M <span class="comment">— restaurer</span>
+      </div>
+      <hr class="sep">
+      <h3>Solutions de sauvegarde d'entreprise</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Solution</th><th>Type</th><th>OS</th></tr>
+        <tr><td><strong style="color:var(--accent2)">Veeam Backup</strong></td><td>VM + physique</td><td>Windows/Linux</td></tr>
+        <tr><td><strong style="color:var(--accent4)">Acronis</strong></td><td>Image + fichiers</td><td>Multi</td></tr>
+        <tr><td><strong style="color:var(--accent6)">Bacula / Bareos</strong></td><td>Open-source</td><td>Linux</td></tr>
+        <tr><td><strong style="color:var(--accent3)">Azure Backup</strong></td><td>Cloud</td><td>Multi</td></tr>
+        <tr><td><strong style="color:var(--muted)">Windows Server Backup</strong></td><td>Natif Windows</td><td>Windows</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SUPERVISION ====== -->
+<div class="section" id="supervision">
+  <div class="section-title"><h2>Supervision & Monitoring</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>SNMP — Simple Network Management Protocol</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Version</th><th>Sécurité</th><th>Usage</th></tr>
+        <tr><td><span class="badge badge-red">SNMPv1</span></td><td>Community string (clair)</td><td>Obsolète</td></tr>
+        <tr><td><span class="badge badge-orange">SNMPv2c</span></td><td>Community string (clair)</td><td>Encore répandu</td></tr>
+        <tr><td><span class="badge badge-green">SNMPv3</span></td><td>Authentification + chiffrement</td><td>Recommandé</td></tr>
+      </table>
+      <table style="margin-top:0.75rem">
+        <tr><th>Composant</th><th>Rôle</th><th>Port</th></tr>
+        <tr><td><strong>Agent SNMP</strong></td><td>Sur l'équipement supervisé — répond aux requêtes</td><td>161 UDP</td></tr>
+        <tr><td><strong>Manager/NMS</strong></td><td>Serveur de supervision — interroge les agents</td><td>161 UDP</td></tr>
+        <tr><td><strong>Trap</strong></td><td>Alerte envoyée spontanément par l'agent</td><td>162 UDP</td></tr>
+        <tr><td><strong>MIB</strong></td><td>Management Information Base — base de données d'OIDs</td><td>—</td></tr>
+        <tr><td><strong>OID</strong></td><td>Object Identifier — identifiant unique d'un paramètre</td><td>—</td></tr>
+        <tr><td><strong>Community string</strong></td><td>Mot de passe en clair (v1/v2c) — souvent "public"</td><td>—</td></tr>
+      </table>
+      <div class="formula">Get (lecture) / Set (écriture) / GetNext / Trap (alerte spontanée)</div>
+    </div>
+
+    <div class="card">
+      <h3>Outils de supervision</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Outil</th><th>Type</th><th>Points forts</th></tr>
+        <tr><td><strong style="color:var(--accent2)">Zabbix</strong></td><td>Open-source</td><td>Très complet, SNMP, agents, dashboards</td></tr>
+        <tr><td><strong style="color:var(--accent4)">Nagios / Icinga2</strong></td><td>Open-source</td><td>Référence historique, plugins nombreux</td></tr>
+        <tr><td><strong style="color:var(--accent6)">PRTG</strong></td><td>Commercial</td><td>Simple, interface graphique, Windows</td></tr>
+        <tr><td><strong style="color:var(--accent3)">Grafana + Prometheus</strong></td><td>Open-source</td><td>Métriques, dashboards, Cloud/conteneurs</td></tr>
+        <tr><td><strong style="color:var(--muted)">LibreNMS</strong></td><td>Open-source</td><td>Découverte auto réseau, SNMP</td></tr>
+        <tr><td><strong style="color:var(--accent5)">Centreon</strong></td><td>Open-source/Com.</td><td>Interface Nagios améliorée, populaire FR</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Types de supervision</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:var(--accent2)">Disponibilité</strong> — ping, port TCP, HTTP check (up/down)</li>
+        <li><strong style="color:var(--accent4)">Performance</strong> — CPU, RAM, disque, bande passante</li>
+        <li><strong style="color:var(--accent6)">Logs / Syslog</strong> — collecte centralisée des journaux</li>
+        <li><strong style="color:var(--accent3)">Alertes</strong> — seuils warning/critical → notification e-mail/SMS</li>
+        <li><strong style="color:var(--muted)">Inventaire auto</strong> — découverte des équipements réseau</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Nagios / Icinga2 — Concepts</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Terme</th><th>Définition</th></tr>
+        <tr><td><code>Host</code></td><td>Équipement supervisé (serveur, switch…)</td></tr>
+        <tr><td><code>Service</code></td><td>Vérification sur un host (ping, CPU, port…)</td></tr>
+        <tr><td><code>Check</code></td><td>Exécution d'un plugin de surveillance</td></tr>
+        <tr><td><code>Plugin</code></td><td>Script retournant OK/WARNING/CRITICAL/UNKNOWN</td></tr>
+        <tr><td><code>Notification</code></td><td>Alerte envoyée lors d'un changement d'état</td></tr>
+        <tr><td><code>Contact</code></td><td>Personne ou groupe à notifier</td></tr>
+        <tr><td><code>Downtime</code></td><td>Fenêtre de maintenance (supprime les alertes)</td></tr>
+        <tr><td><code>Escalade</code></td><td>Alerte montée au niveau supérieur si non traitée</td></tr>
+      </table>
+      <div class="formula">États : OK (0) → WARNING (1) → CRITICAL (2) → UNKNOWN (3)</div>
+    </div>
+
+    <div class="card">
+      <h3>Syslog — Centralisation des logs</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Niveau</th><th>Valeur</th><th>Signification</th></tr>
+        <tr><td><span class="badge badge-red">Emergency</span></td><td>0</td><td>Système inutilisable</td></tr>
+        <tr><td><span class="badge badge-red">Alert</span></td><td>1</td><td>Action immédiate requise</td></tr>
+        <tr><td><span class="badge badge-red">Critical</span></td><td>2</td><td>Condition critique</td></tr>
+        <tr><td><span class="badge badge-orange">Error</span></td><td>3</td><td>Erreur</td></tr>
+        <tr><td><span class="badge badge-orange">Warning</span></td><td>4</td><td>Avertissement</td></tr>
+        <tr><td><span class="badge badge-blue">Notice</span></td><td>5</td><td>Condition normale à signaler</td></tr>
+        <tr><td><span class="badge badge-green">Informational</span></td><td>6</td><td>Information</td></tr>
+        <tr><td><span class="badge" style="background:#1a1a1a;color:var(--muted);border:1px solid var(--border)">Debug</span></td><td>7</td><td>Messages de débogage</td></tr>
+      </table>
+      <div class="formula">Port Syslog : 514 UDP (514 TCP pour TCP Syslog)</div>
+      <hr class="sep">
+      <h3>Stack ELK — Supervision avancée</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong style="color:var(--accent4)">Elasticsearch</strong> — moteur de recherche et stockage des logs</li>
+        <li><strong style="color:var(--accent2)">Logstash</strong> — collecte, transformation et envoi des logs</li>
+        <li><strong style="color:var(--accent6)">Kibana</strong> — interface de visualisation et dashboards</li>
+        <li><strong style="color:var(--accent3)">Beats</strong> — agents légers de collecte (Filebeat, Metricbeat…)</li>
+      </ul>
+      <div class="formula">Agents → Logstash → Elasticsearch → Kibana</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Commandes de diagnostic réseau avancées</h3>
+    <div class="two-col">
+      <div>
+        <div class="cmd-block"><span class="cmd">snmpwalk</span> -v2c -c public 192.168.1.1 <span class="comment">— parcourir MIB</span></div>
+        <div class="cmd-block"><span class="cmd">snmpget</span> -v2c -c public 192.168.1.1 sysDescr.0</div>
+        <div class="cmd-block"><span class="cmd">nmap</span> -sV -p 1-1024 192.168.1.0/24 <span class="comment">— scan réseau</span></div>
+        <div class="cmd-block"><span class="cmd">nmap</span> -O 192.168.1.1 <span class="comment">— détection OS</span></div>
+        <div class="cmd-block"><span class="cmd">tcpdump</span> -i eth0 -n port 80 <span class="comment">— capture trafic</span></div>
+        <div class="cmd-block"><span class="cmd">tcpdump</span> -w capture.pcap -i eth0</div>
+      </div>
+      <div>
+        <div class="cmd-block"><span class="cmd">wireshark</span> <span class="comment">— analyse .pcap graphique</span></div>
+        <div class="cmd-block"><span class="cmd">mtr</span> 8.8.8.8 <span class="comment">— traceroute + ping continu</span></div>
+        <div class="cmd-block"><span class="cmd">iperf3</span> -s <span class="comment">— serveur test débit</span></div>
+        <div class="cmd-block"><span class="cmd">iperf3</span> -c 192.168.1.1 <span class="comment">— client test débit</span></div>
+        <div class="cmd-block"><span class="cmd">netstat</span> -s <span class="comment">— statistiques protocoles</span></div>
+        <div class="cmd-block"><span class="cmd">ss</span> -s <span class="comment">— résumé des sockets</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MESSAGERIE ====== -->
+<div class="section" id="messagerie">
+  <div class="section-title"><h2>Messagerie — Exchange & Microsoft 365</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>Exchange Server — Architecture</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Rôle Exchange</th><th>Fonction</th></tr>
+        <tr><td><span class="badge badge-blue">Mailbox</span></td><td>Stockage des boîtes aux lettres (base principale)</td></tr>
+        <tr><td><span class="badge badge-orange">Edge Transport</span></td><td>Passerelle DMZ — filtrage antispam/antivirus entrant</td></tr>
+        <tr><td><span class="badge badge-green">Hub Transport</span></td><td>Routage des messages internes (intégré dans Mailbox depuis Ex2013)</td></tr>
+        <tr><td><span class="badge badge-purple">Client Access</span></td><td>Point d'accès clients (OWA, ActiveSync…) — intégré depuis Ex2013</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Protocoles de messagerie</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Protocole</th><th>Port</th><th>Usage</th></tr>
+        <tr><td>SMTP</td><td>25 / 587</td><td>Envoi inter-serveurs / clients</td></tr>
+        <tr><td>SMTPS</td><td>465</td><td>SMTP chiffré (TLS)</td></tr>
+        <tr><td>IMAP</td><td>143 / 993</td><td>Réception synchronisée</td></tr>
+        <tr><td>POP3</td><td>110 / 995</td><td>Réception téléchargement</td></tr>
+        <tr><td>MAPI/HTTPS</td><td>443</td><td>Client Outlook (moderne)</td></tr>
+        <tr><td>OWA</td><td>443</td><td>Outlook Web Access (navigateur)</td></tr>
+        <tr><td>EWS</td><td>443</td><td>Exchange Web Services</td></tr>
+        <tr><td>ActiveSync</td><td>443</td><td>Sync mobiles (EAS)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Exchange — Commandes PowerShell</h3>
+      <div class="cmd-block">
+        <span class="comment"># Connexion à Exchange</span><br>
+        <span class="cmd">Add-PSSnapin</span> Microsoft.Exchange.Management.PowerShell.SnapIn<br>
+        <span class="comment"># Ou via EMS (Exchange Management Shell)</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Boîtes aux lettres</span><br>
+        <span class="cmd">Get-Mailbox</span> -Identity jdupont<br>
+        <span class="cmd">New-Mailbox</span> -UserPrincipalName j.dupont@dom.local -Alias jdupont -Name <span style="color:var(--accent6)">"Jean Dupont"</span><br>
+        <span class="cmd">Set-Mailbox</span> -Identity jdupont -ProhibitSendQuota 5GB -IssueWarningQuota 4GB<br>
+        <span class="cmd">Get-MailboxStatistics</span> -Identity jdupont | Select-Object TotalItemSize,ItemCount<br>
+        <span class="cmd">Disable-Mailbox</span> -Identity jdupont <span class="comment">— désactiver sans supprimer</span><br>
+        <span class="cmd">Remove-Mailbox</span> -Identity jdupont
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Groupes de distribution</span><br>
+        <span class="cmd">New-DistributionGroup</span> -Name <span style="color:var(--accent6)">"Equipe_IT"</span> -PrimarySmtpAddress it@dom.local<br>
+        <span class="cmd">Add-DistributionGroupMember</span> -Identity <span style="color:var(--accent6)">"Equipe_IT"</span> -Member jdupont<br>
+        <span class="cmd">Get-DistributionGroupMember</span> -Identity <span style="color:var(--accent6)">"Equipe_IT"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Connecteurs et transport</span><br>
+        <span class="cmd">Get-SendConnector</span><br>
+        <span class="cmd">Get-ReceiveConnector</span><br>
+        <span class="cmd">Get-MessageTrackingLog</span> -Sender jdupont@dom.local -Start (Get-Date).AddDays(-1)
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Microsoft 365 / Exchange Online</h3>
+      <div class="cmd-block">
+        <span class="comment"># Connexion à Exchange Online</span><br>
+        <span class="cmd">Install-Module</span> ExchangeOnlineManagement<br>
+        <span class="cmd">Connect-ExchangeOnline</span> -UserPrincipalName admin@tenant.onmicrosoft.com
+      </div>
+      <div class="cmd-block">
+        <span class="cmd">Get-EXOMailbox</span> -Identity jdupont<br>
+        <span class="cmd">Set-EXOMailbox</span> -Identity jdupont -MaxSendSize 25MB<br>
+        <span class="cmd">Get-EXOMailboxStatistics</span> -Identity jdupont<br>
+        <span class="cmd">Disconnect-ExchangeOnline</span> -Confirm:<span class="keyword">$false</span>
+      </div>
+      <hr class="sep">
+      <h3>Licences M365 courantes</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Licence</th><th>Contenu principal</th></tr>
+        <tr><td><span class="badge badge-blue">Microsoft 365 Business Basic</span></td><td>Exchange Online, Teams, SharePoint, 1 To OneDrive</td></tr>
+        <tr><td><span class="badge badge-green">Microsoft 365 Business Standard</span></td><td>Basic + Apps Office desktop</td></tr>
+        <tr><td><span class="badge badge-orange">Microsoft 365 Business Premium</span></td><td>Standard + Intune, Azure AD P1, Defender</td></tr>
+        <tr><td><span class="badge badge-purple">Microsoft 365 E3/E5</span></td><td>Entreprise — conformité, sécurité avancée</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Sécurité messagerie — Enregistrements DNS</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Enregistrement</th><th>Rôle</th><th>Exemple</th></tr>
+        <tr>
+          <td><span class="badge badge-blue">MX</span></td>
+          <td>Serveur de réception des e-mails</td>
+          <td><code>@ MX 10 mail.dom.com</code></td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">SPF</span></td>
+          <td>Serveurs autorisés à envoyer pour ce domaine</td>
+          <td><code>TXT "v=spf1 include:spf.protection.outlook.com -all"</code></td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-orange">DKIM</span></td>
+          <td>Signature cryptographique des e-mails sortants</td>
+          <td><code>selector._domainkey TXT "v=DKIM1; k=rsa; p=..."</code></td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-purple">DMARC</span></td>
+          <td>Politique SPF+DKIM — action si échec (none/quarantine/reject)</td>
+          <td><code>_dmarc TXT "v=DMARC1; p=reject; rua=mailto:..."</code></td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">PTR</span></td>
+          <td>Reverse DNS — IP du serveur mail → nom (antispam)</td>
+          <td><code>1.2.168.192.in-addr.arpa PTR mail.dom.com</code></td>
+        </tr>
+      </table>
+      <div class="formula">Chaîne anti-spam : SPF (qui ?) + DKIM (intégrité) + DMARC (politique)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SERVICES WINDOWS ====== -->
+<div class="section" id="srvwin">
+  <div class="section-title"><h2>Services Windows — PKI, WSUS, RDS</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>AD CS — PKI Windows (Certificate Services)</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">AD CS permet de gérer une Infrastructure à Clé Publique (PKI) interne pour émettre des certificats de confiance.</p>
+      <table style="margin-top:0.5rem">
+        <tr><th>Composant</th><th>Rôle</th></tr>
+        <tr><td><span class="badge badge-blue">Root CA</span></td><td>Autorité racine — hors ligne recommandée (sécurité max)</td></tr>
+        <tr><td><span class="badge badge-green">Subordinate CA</span></td><td>AC intermédiaire — en ligne, émet les certificats finaux</td></tr>
+        <tr><td><span class="badge badge-orange">Enterprise CA</span></td><td>Intégrée à AD, templates automatiques, inscription auto</td></tr>
+        <tr><td><span class="badge badge-purple">Standalone CA</span></td><td>Indépendante d'AD, approbation manuelle</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Templates de certificats courants</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Template</th><th>Usage</th></tr>
+        <tr><td><code>Computer</code></td><td>Authentification machine au domaine</td></tr>
+        <tr><td><code>User</code></td><td>Authentification utilisateur, chiffrement e-mail</td></tr>
+        <tr><td><code>Web Server</code></td><td>Certificat HTTPS pour IIS</td></tr>
+        <tr><td><code>Domain Controller</code></td><td>LDAPS, Kerberos sur les DC</td></tr>
+        <tr><td><code>Code Signing</code></td><td>Signer des scripts PowerShell</td></tr>
+      </table>
+      <div class="cmd-block" style="margin-top:0.75rem">
+        <span class="comment"># Installer AD CS</span><br>
+        <span class="cmd">Add-WindowsFeature</span> ADCS-Cert-Authority -IncludeManagementTools<br>
+        <span class="cmd">Install-AdcsCertificationAuthority</span> -CAType EnterpriseRootCA -CACommonName <span style="color:var(--accent6)">"MonEntreprise-CA"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Gestion des certificats</span><br>
+        <span class="cmd">certlm.msc</span> <span class="comment">— gestionnaire (machine locale)</span><br>
+        <span class="cmd">certmgr.msc</span> <span class="comment">— gestionnaire (utilisateur)</span><br>
+        <span class="cmd">certutil -ping</span> <span class="comment">— tester la CA</span><br>
+        <span class="cmd">certutil -revoke &lt;SerialNumber&gt;</span> <span class="comment">— révoquer</span><br>
+        <span class="cmd">certutil -CRL</span> <span class="comment">— publier la CRL</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>WSUS — Windows Server Update Services</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">WSUS centralise la distribution des mises à jour Microsoft sur le réseau interne — économie de bande passante et contrôle des déploiements.</p>
+      <div class="cmd-block">
+        <span class="comment"># Installation WSUS</span><br>
+        <span class="cmd">Install-WindowsFeature</span> UpdateServices -IncludeManagementTools<br>
+        <span class="cmd">wsusutil.exe postinstall CONTENT_DIR=D:\WSUS</span>
+      </div>
+      <table style="margin-top:0.75rem; margin-bottom:0.75rem">
+        <tr><th>Élément WSUS</th><th>Rôle</th></tr>
+        <tr><td><span class="badge badge-blue">Groupe d'ordinateurs</span></td><td>Cibler des MàJ à des ensembles de machines (Test, Prod…)</td></tr>
+        <tr><td><span class="badge badge-green">Approbation</span></td><td>Approuver / refuser / différer une mise à jour</td></tr>
+        <tr><td><span class="badge badge-orange">Synchronisation</span></td><td>Téléchargement depuis Microsoft Update (planifiable)</td></tr>
+        <tr><td><span class="badge badge-purple">Nettoyage</span></td><td>Assistant de nettoyage — supprimer les MàJ obsolètes</td></tr>
+        <tr><td><span class="badge badge-red">Rapport</span></td><td>État des MàJ par machine / groupe</td></tr>
+      </table>
+      <h3>Configurer les clients via GPO</h3>
+      <ul style="margin-top:0.5rem; font-size:0.82rem">
+        <li>Chemin GPO : <code>Config Ordi → Modèles d'admin → Composants Windows → Windows Update</code></li>
+        <li><strong>Spécifier l'emplacement du service WSUS</strong> : <code>http://SRV-WSUS:8530</code></li>
+        <li><strong>Configurer les mises à jour automatiques</strong> : planifier le téléchargement et l'installation</li>
+        <li><strong>Ciblage côté client</strong> : affecter les machines aux groupes WSUS automatiquement</li>
+      </ul>
+      <div class="cmd-block" style="margin-top:0.5rem">
+        <span class="comment"># Forcer la détection WSUS depuis un client</span><br>
+        <span class="cmd">wuauclt /detectnow</span> <span class="comment">— ancienne méthode</span><br>
+        <span class="cmd">UsoClient StartScan</span> <span class="comment">— Windows 10/11</span><br>
+        <span class="cmd">usoclient StartInteractiveScan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>RDS — Remote Desktop Services</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">RDS permet la virtualisation des applications et des bureaux Windows pour les utilisateurs distants.</p>
+      <table style="margin-top:0.5rem">
+        <tr><th>Rôle RDS</th><th>Fonction</th></tr>
+        <tr><td><span class="badge badge-blue">RD Session Host</span></td><td>Héberge les sessions utilisateurs (Remote Desktop)</td></tr>
+        <tr><td><span class="badge badge-green">RD Connection Broker</span></td><td>Équilibrage de charge, reconnexion aux sessions</td></tr>
+        <tr><td><span class="badge badge-orange">RD Web Access</span></td><td>Portail web de publication des applications RemoteApp</td></tr>
+        <tr><td><span class="badge badge-purple">RD Gateway</span></td><td>Accès sécurisé depuis Internet via HTTPS (port 443)</td></tr>
+        <tr><td><span class="badge badge-red">RD Licensing</span></td><td>Gestion des licences CAL RDS</td></tr>
+        <tr><td><span class="badge badge-teal">RD Virtualization Host</span></td><td>VDI — bureaux virtuels (VMs Hyper-V par utilisateur)</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Licences RDS (CAL)</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type CAL</th><th>Attribution</th></tr>
+        <tr><td><span class="badge badge-blue">RDS CAL par utilisateur</span></td><td>Licence attachée au compte — recommandé nomades</td></tr>
+        <tr><td><span class="badge badge-green">RDS CAL par périphérique</span></td><td>Licence attachée à la machine — recommandé postes fixes</td></tr>
+      </table>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem">⚠️ Sans serveur de licences configuré → période de grâce de 120 jours seulement</div>
+    </div>
+
+    <div class="card">
+      <h3>RDS — Commandes & RemoteApp</h3>
+      <div class="cmd-block">
+        <span class="comment"># Installation des rôles RDS</span><br>
+        <span class="cmd">Add-WindowsFeature</span> RDS-RD-Server, RDS-Licensing, RDS-Web-Access, RDS-Connection-Broker -IncludeManagementTools
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Gestion des sessions (PowerShell)</span><br>
+        <span class="cmd">Get-RDUserSession</span> -ConnectionBroker SRV-RDSB<br>
+        <span class="cmd">Disconnect-RDUser</span> -HostServer SRV-RDSH -UnifiedSessionId 3<br>
+        <span class="cmd">Stop-RDSession</span> -HostServer SRV-RDSH -UnifiedSessionId 3 -Force
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># En ligne de commande classique</span><br>
+        <span class="cmd">query session /server:SRV-RDSH</span> <span class="comment">— liste sessions</span><br>
+        <span class="cmd">logoff 3 /server:SRV-RDSH</span> <span class="comment">— déconnecter session 3</span><br>
+        <span class="cmd">mstsc /v:SRV-RDSH</span> <span class="comment">— se connecter en RDP</span><br>
+        <span class="cmd">mstsc /admin</span> <span class="comment">— session admin (console)</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># RemoteApp — publier une application</span><br>
+        <span class="cmd">New-RDRemoteApp</span> -CollectionName <span style="color:var(--accent6)">"Bureau"</span> -DisplayName <span style="color:var(--accent6)">"Word"</span> -FilePath <span style="color:var(--accent6)">"C:\Program Files\...\WINWORD.EXE"</span> -ConnectionBroker SRV-RDSB
+      </div>
+      <hr class="sep">
+      <h3>IIS — Serveur Web Windows</h3>
+      <div class="cmd-block">
+        <span class="cmd">Add-WindowsFeature</span> Web-Server -IncludeManagementTools<br>
+        <span class="cmd">iisreset</span> <span class="comment">— redémarrer IIS</span><br>
+        <span class="cmd">iisreset /stop</span> | <span class="cmd">iisreset /start</span><br>
+        <span class="cmd">Get-WebSite</span> <span class="comment">— lister les sites</span><br>
+        <span class="cmd">New-WebSite</span> -Name <span style="color:var(--accent6)">"MonSite"</span> -Port 80 -PhysicalPath <span style="color:var(--accent6)">"C:\inetpub\monsite"</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== INFRA PHYSIQUE ====== -->
+<div class="section" id="infra">
+  <div class="section-title"><h2>Infrastructure physique — Wi-Fi, Câblage, Onduleurs</h2></div>
+
+  <div class="grid">
+    <div class="card blue">
+      <h3>Wi-Fi — Standards 802.11</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Standard</th><th>Bande</th><th>Débit max théorique</th><th>Portée</th></tr>
+        <tr><td><span class="badge badge-red">802.11b</span></td><td>2,4 GHz</td><td>11 Mbps</td><td>~30 m</td></tr>
+        <tr><td><span class="badge badge-orange">802.11g</span></td><td>2,4 GHz</td><td>54 Mbps</td><td>~30 m</td></tr>
+        <tr><td><span class="badge badge-blue">802.11a</span></td><td>5 GHz</td><td>54 Mbps</td><td>~15 m</td></tr>
+        <tr><td><span class="badge badge-green">802.11n (Wi-Fi 4)</span></td><td>2,4 / 5 GHz</td><td>600 Mbps</td><td>~70 m</td></tr>
+        <tr><td><span class="badge badge-purple">802.11ac (Wi-Fi 5)</span></td><td>5 GHz</td><td>3,5 Gbps</td><td>~35 m</td></tr>
+        <tr><td><span class="badge badge-teal">802.11ax (Wi-Fi 6/6E)</span></td><td>2,4 / 5 / 6 GHz</td><td>9,6 Gbps</td><td>~30 m</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Sécurité Wi-Fi</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Protocole</th><th>Chiffrement</th><th>Sécurité</th></tr>
+        <tr><td><span class="badge badge-red">WEP</span></td><td>RC4</td><td style="color:var(--accent5)">❌ Cassé (obsolète)</td></tr>
+        <tr><td><span class="badge badge-orange">WPA</span></td><td>TKIP</td><td style="color:var(--accent5)">❌ Vulnérable</td></tr>
+        <tr><td><span class="badge badge-blue">WPA2-Personal</span></td><td>AES-CCMP</td><td style="color:var(--accent4)">⚠️ OK (sans PSK faible)</td></tr>
+        <tr><td><span class="badge badge-green">WPA2-Enterprise</span></td><td>AES + 802.1X/RADIUS</td><td style="color:var(--accent2)">✅ Recommandé entreprise</td></tr>
+        <tr><td><span class="badge badge-purple">WPA3</span></td><td>SAE / AES-GCM 256</td><td style="color:var(--accent2)">✅ Standard actuel</td></tr>
+      </table>
+      <div class="formula">WPA2-Enterprise : Client → Authenticator (AP) → RADIUS (AD/NPS)</div>
+    </div>
+
+    <div class="card">
+      <h3>Câblage réseau — Standards</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Catégorie</th><th>Débit max</th><th>Fréquence</th><th>Usage</th></tr>
+        <tr><td><span class="badge badge-orange">Cat 5e</span></td><td>1 Gbps</td><td>100 MHz</td><td>Réseau bureautique courant</td></tr>
+        <tr><td><span class="badge badge-blue">Cat 6</span></td><td>10 Gbps (55 m)</td><td>250 MHz</td><td>Datacenter / bureautique</td></tr>
+        <tr><td><span class="badge badge-green">Cat 6a</span></td><td>10 Gbps (100 m)</td><td>500 MHz</td><td>Datacenter recommandé</td></tr>
+        <tr><td><span class="badge badge-purple">Cat 7</span></td><td>10 Gbps</td><td>600 MHz</td><td>Datacenter haute perf.</td></tr>
+        <tr><td><span class="badge badge-teal">Cat 8</span></td><td>40 Gbps (30 m)</td><td>2000 MHz</td><td>Baie de brassage</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Connecteurs & Fibre optique</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Connecteur</th><th>Débit/Distance</th><th>Usage</th></tr>
+        <tr><td><span class="badge badge-orange">Fibre multimodes (MM)</span></td><td>LC, SC, ST</td><td>10 Gbps / 300 m</td><td>LAN, datacenter</td></tr>
+        <tr><td><span class="badge badge-blue">Fibre monomode (SM)</span></td><td>LC, SC</td><td>100 Gbps / 40 km+</td><td>WAN, inter-sites</td></tr>
+        <tr><td><span class="badge badge-green">SFP / SFP+</span></td><td>—</td><td>1 / 10 Gbps</td><td>Modules switch/routeur</td></tr>
+        <tr><td><span class="badge badge-purple">QSFP+</span></td><td>—</td><td>40 / 100 Gbps</td><td>Datacenters</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Normes de câblage TIA-568</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Brochage</th><th>Usage</th></tr>
+        <tr><td><span class="badge badge-blue">T568A</span></td><td>Norme résidentielle et internationale</td></tr>
+        <tr><td><span class="badge badge-orange">T568B</span></td><td>Norme commerciale US — la plus répandue</td></tr>
+        <tr><td><strong>Droit</strong></td><td>Même brochage des 2 côtés (PC → switch)</td></tr>
+        <tr><td><strong>Croisé</strong></td><td>T568A + T568B (PC → PC, switch → switch)</td></tr>
+      </table>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem">Aujourd'hui les équipements récents supportent <strong>Auto-MDI/MDI-X</strong> → câble droit suffit dans tous les cas.</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Onduleur (UPS) — Alimentation sans interruption</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Type</th><th>Fonctionnement</th><th>Usage</th></tr>
+        <tr><td><span class="badge badge-orange">Off-line (Stand-by)</span></td><td>Batterie en veille, bascule à la coupure (~10 ms)</td><td>Bureautique simple</td></tr>
+        <tr><td><span class="badge badge-blue">Line-interactive</span></td><td>Régulation tension + batterie, bascule rapide (~4 ms)</td><td>Serveurs PME</td></tr>
+        <tr><td><span class="badge badge-green">On-line (Double conversion)</span></td><td>Toujours sur batterie/onduleur — 0 ms coupure</td><td>Datacenter, critique</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Paramètres importants</h3>
+      <table style="margin-top:0.5rem">
+        <tr><th>Paramètre</th><th>Définition</th></tr>
+        <tr><td><strong>VA (Volt-Ampère)</strong></td><td>Puissance apparente (capacité de l'onduleur)</td></tr>
+        <tr><td><strong>W (Watts)</strong></td><td>Puissance active réelle = VA × facteur de puissance</td></tr>
+        <tr><td><strong>Autonomie</strong></td><td>Durée sur batterie selon charge (en %)</td></tr>
+        <tr><td><strong>Facteur de puissance</strong></td><td>Ratio W/VA — serveurs récents : 0,9 à 1,0</td></tr>
+      </table>
+      <div class="formula">Charge recommandée : 60–80 % de la capacité nominale</div>
+      <hr class="sep">
+      <h3>Protocoles de communication UPS</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong>USB</strong> — connexion directe, 1 serveur</li>
+        <li><strong>RS-232 / Serial</strong> — connexion directe legacy</li>
+        <li><strong>SNMP (carte réseau)</strong> — supervision à distance, arrêt automatique réseau</li>
+        <li><strong>NUT</strong> (Network UPS Tools) — open-source Linux, partage un UPS sur réseau</li>
+        <li><strong>Eaton IPM / APC PowerChute</strong> — logiciels propriétaires de gestion UPS</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>IPMI / iDRAC / iLO — Gestion hors-bande</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Interface de gestion matérielle indépendante de l'OS — permet de contrôler le serveur même éteint ou planté.</p>
+      <table style="margin-top:0.5rem">
+        <tr><th>Technologie</th><th>Fabricant</th></tr>
+        <tr><td><span class="badge badge-blue">iDRAC</span></td><td>Dell — Integrated Dell Remote Access Controller</td></tr>
+        <tr><td><span class="badge badge-green">iLO</span></td><td>HP — Integrated Lights-Out</td></tr>
+        <tr><td><span class="badge badge-orange">IPMI</span></td><td>Standard ouvert (Intel, Supermicro…)</td></tr>
+        <tr><td><span class="badge badge-purple">BMC</span></td><td>Baseboard Management Controller — puce physique</td></tr>
+      </table>
+      <ul style="margin-top:0.75rem">
+        <li>Interface web dédiée (port dédié réseau)</li>
+        <li>Console KVM virtuelle — accès clavier/souris/écran à distance</li>
+        <li>Allumage / extinction / redémarrage à distance</li>
+        <li>Montage ISO virtuel pour réinstallation OS</li>
+        <li>Supervision température, tension, ventilateurs</li>
+        <li>Consultation des journaux SEL (System Event Log)</li>
+      </ul>
+      <hr class="sep">
+      <h3>Baie de brassage — Bonnes pratiques</h3>
+      <ul style="margin-top:0.5rem">
+        <li><strong>Patch panel 19"</strong> — standard datacenter, unités en U (1U = 44,45 mm)</li>
+        <li><strong>Gestion des câbles</strong> — anneau de câblage, couleurs par VLAN/usage</li>
+        <li><strong>Face avant</strong> : ports patchs → équipements | <strong>Face arrière</strong> : câblage fixe (chemins de câbles)</li>
+        <li><strong>Documentation</strong> : schéma de câblage, étiquetage systématique des ports</li>
+        <li><strong>PDU</strong> (Power Distribution Unit) — répartition électrique en baie</li>
+        <li><strong>1U switch de gestion</strong> (KVM over IP) — accès console centralisé</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <!-- ====== RECAP ====== -->
 <div class="section" id="recap">
   <div class="section-title"><h2>Récapitulatif mémo — À retenir absolument</h2></div>
@@ -2379,7 +2999,7 @@
 </div><!-- end .content -->
 
 <script>
-const sections = ['osi','ports','ip','routage','cisco','ad','gpo','windows','linux','disques','scripting','powershell','secu','virt','itil','recap'];
+const sections = ['osi','ports','ip','routage','cisco','ad','gpo','windows','linux','disques','scripting','powershell','secu','virt','itil','sauvegarde','supervision','messagerie','srvwin','infra','recap'];
 function show(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
