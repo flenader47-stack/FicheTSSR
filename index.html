@@ -192,6 +192,7 @@
   <button onclick="show('linux')">Linux</button>
   <button onclick="show('disques')">Disques</button>
   <button onclick="show('scripting')">Scripting</button>
+  <button onclick="show('powershell')">PowerShell</button>
   <button onclick="show('secu')">Sécurité</button>
   <button onclick="show('virt')">Virtualisation</button>
   <button onclick="show('itil')">ITIL & GLPI</button>
@@ -1520,6 +1521,436 @@
   </div>
 </div>
 
+<!-- ====== POWERSHELL ====== -->
+<div class="section" id="powershell">
+  <div class="section-title"><h2>PowerShell — Référence complète TSSR</h2></div>
+
+  <!-- BASES & PIPELINE -->
+  <div class="grid">
+    <div class="card blue">
+      <h3>Fondamentaux & Pipeline</h3>
+      <div class="cmd-block">
+        <span class="comment"># Politique d'exécution</span><br>
+        <span class="cmd">Get-ExecutionPolicy</span><br>
+        <span class="cmd">Set-ExecutionPolicy RemoteSigned</span> <span class="comment">— scripts locaux OK</span><br>
+        <span class="cmd">Set-ExecutionPolicy Bypass -Scope Process</span> <span class="comment">— session uniquement</span>
+      </div>
+      <table style="margin-top:0.5rem; margin-bottom:0.75rem">
+        <tr><th>Politique</th><th>Effet</th></tr>
+        <tr><td><code>Restricted</code></td><td style="color:var(--accent5)">Aucun script autorisé (défaut Win)</td></tr>
+        <tr><td><code>AllSigned</code></td><td>Seulement scripts signés</td></tr>
+        <tr><td><code>RemoteSigned</code></td><td style="color:var(--accent2)">Scripts locaux OK, distants = signés</td></tr>
+        <tr><td><code>Unrestricted</code></td><td style="color:var(--accent4)">Tous scripts OK (risqué)</td></tr>
+        <tr><td><code>Bypass</code></td><td>Tout autorisé sans avertissement</td></tr>
+      </table>
+      <hr class="sep">
+      <h3>Pipeline — Opérateurs essentiels</h3>
+      <div class="cmd-block">
+        <span class="comment"># | passe les objets à la commande suivante</span><br>
+        <span class="cmd">Get-Process</span> | <span class="cmd">Where-Object</span> { <span class="keyword">$_.CPU</span> -gt 100 } |<br>
+        &nbsp;&nbsp;<span class="cmd">Sort-Object</span> CPU -Descending |<br>
+        &nbsp;&nbsp;<span class="cmd">Select-Object</span> Name, CPU, Id -First 5
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Alias courants du pipeline</span><br>
+        <span class="cmd">Where-Object</span> = <span class="keyword">?</span> ou <span class="keyword">where</span><br>
+        <span class="cmd">ForEach-Object</span> = <span class="keyword">%</span> ou <span class="keyword">foreach</span><br>
+        <span class="cmd">Select-Object</span> = <span class="keyword">select</span><br>
+        <span class="cmd">Sort-Object</span> = <span class="keyword">sort</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Redirection sortie</span><br>
+        <span class="cmd">Get-Service</span> | <span class="cmd">Out-File</span> <span style="color:var(--accent6)">"C:\services.txt"</span><br>
+        <span class="cmd">Get-Process</span> | <span class="cmd">Export-Csv</span> <span style="color:var(--accent6)">"C:\proc.csv"</span> -NoTypeInformation<br>
+        <span class="cmd">Get-Service</span> | <span class="cmd">ConvertTo-Html</span> | <span class="cmd">Out-File</span> <span style="color:var(--accent6)">"C:\svc.html"</span><br>
+        <span class="cmd">Get-Process</span> | <span class="cmd">ConvertTo-Json</span> | <span class="cmd">Out-File</span> <span style="color:var(--accent6)">"C:\proc.json"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Gestion des services Windows</h3>
+      <div class="cmd-block">
+        <span class="cmd">Get-Service</span> <span class="comment">— lister tous les services</span><br>
+        <span class="cmd">Get-Service</span> -Name <span style="color:var(--accent6)">"Spooler"</span><br>
+        <span class="cmd">Get-Service</span> | <span class="cmd">Where-Object</span> { <span class="keyword">$_.Status</span> -eq <span style="color:var(--accent6)">"Stopped"</span> }
+      </div>
+      <div class="cmd-block">
+        <span class="cmd">Start-Service</span> -Name <span style="color:var(--accent6)">"Spooler"</span><br>
+        <span class="cmd">Stop-Service</span> -Name <span style="color:var(--accent6)">"Spooler"</span> -Force<br>
+        <span class="cmd">Restart-Service</span> -Name <span style="color:var(--accent6)">"Spooler"</span><br>
+        <span class="cmd">Set-Service</span> -Name <span style="color:var(--accent6)">"Spooler"</span> -StartupType Automatic<br>
+        <span class="cmd">Set-Service</span> -Name <span style="color:var(--accent6)">"Spooler"</span> -StartupType Disabled
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Redémarrer les services arrêtés en masse</span><br>
+        <span class="cmd">Get-Service</span> | <span class="cmd">Where-Object</span> { <span class="keyword">$_.StartType</span> -eq <span style="color:var(--accent6)">"Automatic"</span> -and <span class="keyword">$_.Status</span> -eq <span style="color:var(--accent6)">"Stopped"</span> } |<br>
+        &nbsp;&nbsp;<span class="cmd">Start-Service</span>
+      </div>
+      <hr class="sep">
+      <h3>Gestion des processus</h3>
+      <div class="cmd-block">
+        <span class="cmd">Get-Process</span> <span class="comment">— liste tous les processus</span><br>
+        <span class="cmd">Get-Process</span> -Name <span style="color:var(--accent6)">"chrome"</span><br>
+        <span class="cmd">Stop-Process</span> -Name <span style="color:var(--accent6)">"notepad"</span> -Force<br>
+        <span class="cmd">Stop-Process</span> -Id 1234<br>
+        <span class="cmd">Start-Process</span> <span style="color:var(--accent6)">"notepad.exe"</span><br>
+        <span class="cmd">Start-Process</span> <span style="color:var(--accent6)">"cmd.exe"</span> -Verb RunAs <span class="comment">— admin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHIERS & REGISTRE -->
+  <div class="grid">
+    <div class="card">
+      <h3>Gestion des fichiers & dossiers</h3>
+      <div class="cmd-block">
+        <span class="comment"># Navigation</span><br>
+        <span class="cmd">Get-Location</span> <span class="comment">— répertoire courant (pwd)</span><br>
+        <span class="cmd">Set-Location</span> C:\Windows <span class="comment">— changer de dossier (cd)</span><br>
+        <span class="cmd">Get-ChildItem</span> -Path C:\ -Recurse <span class="comment">— (ls / dir)</span><br>
+        <span class="cmd">Get-ChildItem</span> *.log -Recurse
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Créer / Copier / Déplacer / Supprimer</span><br>
+        <span class="cmd">New-Item</span> -Path <span style="color:var(--accent6)">"C:\Dossier"</span> -ItemType Directory<br>
+        <span class="cmd">New-Item</span> -Path <span style="color:var(--accent6)">"C:\fic.txt"</span> -ItemType File<br>
+        <span class="cmd">Copy-Item</span> <span style="color:var(--accent6)">"C:\src"</span> <span style="color:var(--accent6)">"D:\dest"</span> -Recurse<br>
+        <span class="cmd">Move-Item</span> <span style="color:var(--accent6)">"C:\fic.txt"</span> <span style="color:var(--accent6)">"D:\fic.txt"</span><br>
+        <span class="cmd">Remove-Item</span> <span style="color:var(--accent6)">"C:\fic.txt"</span> -Force<br>
+        <span class="cmd">Remove-Item</span> <span style="color:var(--accent6)">"C:\Dossier"</span> -Recurse -Force
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Lire / Écrire dans un fichier</span><br>
+        <span class="cmd">Get-Content</span> <span style="color:var(--accent6)">"C:\log.txt"</span> <span class="comment">— (cat / type)</span><br>
+        <span class="cmd">Get-Content</span> <span style="color:var(--accent6)">"C:\log.txt"</span> -Tail 20 <span class="comment">— 20 dernières lignes</span><br>
+        <span class="cmd">Set-Content</span> <span style="color:var(--accent6)">"C:\fic.txt"</span> <span style="color:var(--accent6)">"Contenu"</span> <span class="comment">— écrase</span><br>
+        <span class="cmd">Add-Content</span> <span style="color:var(--accent6)">"C:\fic.txt"</span> <span style="color:var(--accent6)">"Nouvelle ligne"</span> <span class="comment">— ajoute</span><br>
+        <span class="cmd">Select-String</span> -Path <span style="color:var(--accent6)">"C:\log.txt"</span> -Pattern <span style="color:var(--accent6)">"error"</span> <span class="comment">— grep</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Test d'existence</span><br>
+        <span class="keyword">if</span> (<span class="cmd">Test-Path</span> <span style="color:var(--accent6)">"C:\Dossier"</span>) { <span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Existe"</span> }<br>
+        <span class="cmd">Test-Path</span> <span style="color:var(--accent6)">"C:\fic.txt"</span> -PathType Leaf <span class="comment">— fichier</span><br>
+        <span class="cmd">Test-Path</span> <span style="color:var(--accent6)">"C:\Dir"</span> -PathType Container <span class="comment">— dossier</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Registre Windows</h3>
+      <div class="cmd-block">
+        <span class="comment"># Lecteurs registre PS</span><br>
+        <span class="comment"># HKLM: = HKEY_LOCAL_MACHINE</span><br>
+        <span class="comment"># HKCU: = HKEY_CURRENT_USER</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Lire une clé</span><br>
+        <span class="cmd">Get-ItemProperty</span> <span style="color:var(--accent6)">"HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"</span><br>
+        <span class="cmd">Get-ItemPropertyValue</span> <span style="color:var(--accent6)">"HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"</span> -Name <span style="color:var(--accent6)">"ProductName"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Créer / Modifier une clé</span><br>
+        <span class="cmd">New-Item</span> -Path <span style="color:var(--accent6)">"HKCU:\Software\MonApp"</span><br>
+        <span class="cmd">Set-ItemProperty</span> -Path <span style="color:var(--accent6)">"HKCU:\Software\MonApp"</span> -Name <span style="color:var(--accent6)">"Version"</span> -Value <span style="color:var(--accent6)">"1.0"</span><br>
+        <span class="cmd">New-ItemProperty</span> -Path <span style="color:var(--accent6)">"HKCU:\Software\MonApp"</span> -Name <span style="color:var(--accent6)">"Debug"</span> -Value 1 -PropertyType DWord
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Supprimer</span><br>
+        <span class="cmd">Remove-ItemProperty</span> -Path <span style="color:var(--accent6)">"HKCU:\Software\MonApp"</span> -Name <span style="color:var(--accent6)">"Debug"</span><br>
+        <span class="cmd">Remove-Item</span> -Path <span style="color:var(--accent6)">"HKCU:\Software\MonApp"</span> -Recurse
+      </div>
+      <hr class="sep">
+      <h3>Gestion des partages réseau</h3>
+      <div class="cmd-block">
+        <span class="cmd">Get-SmbShare</span> <span class="comment">— liste les partages SMB</span><br>
+        <span class="cmd">New-SmbShare</span> -Name <span style="color:var(--accent6)">"Data"</span> -Path <span style="color:var(--accent6)">"D:\Data"</span> -FullAccess <span style="color:var(--accent6)">"Admins"</span><br>
+        <span class="cmd">Remove-SmbShare</span> -Name <span style="color:var(--accent6)">"Data"</span><br>
+        <span class="cmd">Get-SmbSession</span> <span class="comment">— connexions actives au partage</span><br>
+        <span class="cmd">New-PSDrive</span> -Name <span style="color:var(--accent6)">"Z"</span> -PSProvider FileSystem -Root <span style="color:var(--accent6)">"\\SRV\Data"</span> -Persist
+      </div>
+    </div>
+  </div>
+
+  <!-- RÉSEAU & WMI -->
+  <div class="grid">
+    <div class="card">
+      <h3>Réseau PowerShell</h3>
+      <div class="cmd-block">
+        <span class="comment"># Configuration IP</span><br>
+        <span class="cmd">Get-NetIPAddress</span> <span class="comment">— toutes les IPs</span><br>
+        <span class="cmd">Get-NetIPAddress</span> -AddressFamily IPv4<br>
+        <span class="cmd">Get-NetAdapter</span> <span class="comment">— cartes réseau</span><br>
+        <span class="cmd">Get-NetRoute</span> <span class="comment">— table de routage</span><br>
+        <span class="cmd">Get-DnsClientServerAddress</span> <span class="comment">— serveurs DNS configurés</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Configurer une IP statique</span><br>
+        <span class="cmd">New-NetIPAddress</span> -InterfaceAlias <span style="color:var(--accent6)">"Ethernet"</span> -IPAddress <span style="color:var(--accent6)">"192.168.1.10"</span> -PrefixLength 24 -DefaultGateway <span style="color:var(--accent6)">"192.168.1.1"</span><br>
+        <span class="cmd">Set-DnsClientServerAddress</span> -InterfaceAlias <span style="color:var(--accent6)">"Ethernet"</span> -ServerAddresses <span style="color:var(--accent6)">"192.168.1.2","8.8.8.8"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Repasser en DHCP</span><br>
+        <span class="cmd">Set-NetIPInterface</span> -InterfaceAlias <span style="color:var(--accent6)">"Ethernet"</span> -Dhcp Enabled<br>
+        <span class="cmd">Set-DnsClientServerAddress</span> -InterfaceAlias <span style="color:var(--accent6)">"Ethernet"</span> -ResetServerAddresses
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Tests réseau</span><br>
+        <span class="cmd">Test-Connection</span> <span style="color:var(--accent6)">"8.8.8.8"</span> -Count 4 <span class="comment">— ping</span><br>
+        <span class="cmd">Test-Connection</span> <span style="color:var(--accent6)">"google.com"</span> -Quiet <span class="comment">— retourne $true/$false</span><br>
+        <span class="cmd">Test-NetConnection</span> -ComputerName <span style="color:var(--accent6)">"SRV-DC01"</span> -Port 3389<br>
+        <span class="cmd">Resolve-DnsName</span> <span style="color:var(--accent6)">"google.com"</span> <span class="comment">— résolution DNS</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Pare-feu Windows</span><br>
+        <span class="cmd">Get-NetFirewallRule</span> | <span class="cmd">Where-Object</span> { <span class="keyword">$_.Enabled</span> -eq <span style="color:var(--accent6)">"True"</span> }<br>
+        <span class="cmd">New-NetFirewallRule</span> -DisplayName <span style="color:var(--accent6)">"RDP Entrant"</span> -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow<br>
+        <span class="cmd">Disable-NetFirewallRule</span> -DisplayName <span style="color:var(--accent6)">"RDP Entrant"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>WMI / CIM — Informations système</h3>
+      <p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.5rem">WMI = Windows Management Instrumentation — interroge le matériel et l'OS. <code>Get-CimInstance</code> est la version moderne de <code>Get-WmiObject</code>.</p>
+      <div class="cmd-block">
+        <span class="comment"># Informations système</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_OperatingSystem <span class="comment">— OS, RAM, version</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_ComputerSystem <span class="comment">— modèle, fabricant, RAM totale</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_Processor <span class="comment">— CPU</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_BIOS <span class="comment">— BIOS/UEFI</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Disques et mémoire</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_LogicalDisk | <span class="cmd">Select-Object</span> DeviceID,<br>
+        &nbsp;&nbsp;@{N=<span style="color:var(--accent6)">"TailleGB"</span>;E={[math]::Round(<span class="keyword">$_.Size</span>/1GB,2)}},<br>
+        &nbsp;&nbsp;@{N=<span style="color:var(--accent6)">"LibreGB"</span>;E={[math]::Round(<span class="keyword">$_.FreeSpace</span>/1GB,2)}}<br>
+        <span class="cmd">Get-CimInstance</span> Win32_PhysicalMemory <span class="comment">— barrettes RAM</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Réseau via WMI</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_NetworkAdapterConfiguration -Filter <span style="color:var(--accent6)">"IPEnabled=True"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Logiciels installés</span><br>
+        <span class="cmd">Get-CimInstance</span> Win32_Product | <span class="cmd">Select-Object</span> Name,Version | <span class="cmd">Sort-Object</span> Name<br>
+        <span class="comment"># Plus rapide — via registre :</span><br>
+        <span class="cmd">Get-ItemProperty</span> <span style="color:var(--accent6)">"HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"</span> | <span class="cmd">Select-Object</span> DisplayName,DisplayVersion
+      </div>
+    </div>
+  </div>
+
+  <!-- UTILISATEURS LOCAUX & TÂCHES PLANIFIÉES -->
+  <div class="grid">
+    <div class="card">
+      <h3>Utilisateurs & Groupes locaux</h3>
+      <div class="cmd-block">
+        <span class="comment"># Utilisateurs locaux</span><br>
+        <span class="cmd">Get-LocalUser</span><br>
+        <span class="cmd">New-LocalUser</span> -Name <span style="color:var(--accent6)">"technicien"</span> -Password (<span class="cmd">ConvertTo-SecureString</span> <span style="color:var(--accent6)">"P@ss!"</span> -AsPlainText -Force) -FullName <span style="color:var(--accent6)">"Technicien IT"</span><br>
+        <span class="cmd">Set-LocalUser</span> -Name <span style="color:var(--accent6)">"technicien"</span> -PasswordNeverExpires <span class="keyword">$true</span><br>
+        <span class="cmd">Enable-LocalUser</span> -Name <span style="color:var(--accent6)">"technicien"</span><br>
+        <span class="cmd">Disable-LocalUser</span> -Name <span style="color:var(--accent6)">"Guest"</span><br>
+        <span class="cmd">Remove-LocalUser</span> -Name <span style="color:var(--accent6)">"technicien"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Groupes locaux</span><br>
+        <span class="cmd">Get-LocalGroup</span><br>
+        <span class="cmd">Get-LocalGroupMember</span> -Group <span style="color:var(--accent6)">"Administrators"</span><br>
+        <span class="cmd">Add-LocalGroupMember</span> -Group <span style="color:var(--accent6)">"Administrators"</span> -Member <span style="color:var(--accent6)">"technicien"</span><br>
+        <span class="cmd">Remove-LocalGroupMember</span> -Group <span style="color:var(--accent6)">"Administrators"</span> -Member <span style="color:var(--accent6)">"technicien"</span><br>
+        <span class="cmd">New-LocalGroup</span> -Name <span style="color:var(--accent6)">"GRP_Helpdesk"</span> -Description <span style="color:var(--accent6)">"Équipe support"</span>
+      </div>
+      <hr class="sep">
+      <h3>Journaux d'événements (Event Log)</h3>
+      <div class="cmd-block">
+        <span class="cmd">Get-EventLog</span> -LogName System -Newest 50<br>
+        <span class="cmd">Get-EventLog</span> -LogName Security -EntryType FailureAudit -Newest 20<br>
+        <span class="cmd">Get-WinEvent</span> -LogName <span style="color:var(--accent6)">"System"</span> -MaxEvents 100<br>
+        <span class="cmd">Get-WinEvent</span> -FilterHashtable @{LogName=<span style="color:var(--accent6)">'Security'</span>; Id=4625} <span class="comment">— échecs connexion</span><br>
+        <span class="cmd">Get-WinEvent</span> -FilterHashtable @{LogName=<span style="color:var(--accent6)">'System'</span>; Level=2} <span class="comment">— erreurs</span>
+      </div>
+      <table style="margin-top:0.5rem">
+        <tr><th>ID Événement</th><th>Signification</th></tr>
+        <tr><td><code>4624</code></td><td>Connexion réussie</td></tr>
+        <tr><td><code>4625</code></td><td>Échec de connexion</td></tr>
+        <tr><td><code>4634</code></td><td>Déconnexion</td></tr>
+        <tr><td><code>4720</code></td><td>Compte utilisateur créé</td></tr>
+        <tr><td><code>4726</code></td><td>Compte utilisateur supprimé</td></tr>
+        <tr><td><code>4740</code></td><td>Compte verrouillé</td></tr>
+        <tr><td><code>7034</code></td><td>Service arrêté de façon inattendue</td></tr>
+        <tr><td><code>41</code></td><td>Arrêt système brutal (kernel power)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Tâches planifiées</h3>
+      <div class="cmd-block">
+        <span class="cmd">Get-ScheduledTask</span> <span class="comment">— liste toutes les tâches</span><br>
+        <span class="cmd">Get-ScheduledTask</span> -TaskName <span style="color:var(--accent6)">"MaTache"</span><br>
+        <span class="cmd">Get-ScheduledTaskInfo</span> -TaskName <span style="color:var(--accent6)">"MaTache"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Créer une tâche planifiée</span><br>
+        <span class="keyword">$action</span> = <span class="cmd">New-ScheduledTaskAction</span> -Execute <span style="color:var(--accent6)">"powershell.exe"</span> -Argument <span style="color:var(--accent6)">"-File C:\Scripts\sauvegarde.ps1"</span><br>
+        <span class="keyword">$trigger</span> = <span class="cmd">New-ScheduledTaskTrigger</span> -Daily -At <span style="color:var(--accent6)">"02:00"</span><br>
+        <span class="keyword">$settings</span> = <span class="cmd">New-ScheduledTaskSettingsSet</span> -RunOnlyIfNetworkAvailable<br>
+        <span class="cmd">Register-ScheduledTask</span> -TaskName <span style="color:var(--accent6)">"Sauvegarde_Nuit"</span> -Action <span class="keyword">$action</span> -Trigger <span class="keyword">$trigger</span> -Settings <span class="keyword">$settings</span> -RunLevel Highest -User <span style="color:var(--accent6)">"SYSTEM"</span>
+      </div>
+      <div class="cmd-block">
+        <span class="cmd">Start-ScheduledTask</span> -TaskName <span style="color:var(--accent6)">"Sauvegarde_Nuit"</span><br>
+        <span class="cmd">Stop-ScheduledTask</span> -TaskName <span style="color:var(--accent6)">"Sauvegarde_Nuit"</span><br>
+        <span class="cmd">Unregister-ScheduledTask</span> -TaskName <span style="color:var(--accent6)">"Sauvegarde_Nuit"</span> -Confirm:<span class="keyword">$false</span>
+      </div>
+      <hr class="sep">
+      <h3>Remoting PowerShell (PSRemoting)</h3>
+      <div class="cmd-block">
+        <span class="comment"># Activer le remoting</span><br>
+        <span class="cmd">Enable-PSRemoting</span> -Force <span class="comment">— sur le serveur distant</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Session interactive</span><br>
+        <span class="cmd">Enter-PSSession</span> -ComputerName <span style="color:var(--accent6)">"SRV-DC01"</span> -Credential (Get-Credential)<br>
+        <span class="cmd">Exit-PSSession</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Exécuter une commande sur plusieurs machines</span><br>
+        <span class="cmd">Invoke-Command</span> -ComputerName <span style="color:var(--accent6)">"SRV01","SRV02","SRV03"</span> -ScriptBlock {<br>
+        &nbsp;&nbsp;<span class="cmd">Get-Service</span> -Name <span style="color:var(--accent6)">"W32Time"</span> | <span class="cmd">Select-Object</span> PSComputerName, Status<br>
+        }
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Session persistante (réutilisable)</span><br>
+        <span class="keyword">$session</span> = <span class="cmd">New-PSSession</span> -ComputerName <span style="color:var(--accent6)">"SRV-DC01"</span><br>
+        <span class="cmd">Invoke-Command</span> -Session <span class="keyword">$session</span> -ScriptBlock { <span class="cmd">hostname</span> }<br>
+        <span class="cmd">Remove-PSSession</span> <span class="keyword">$session</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GESTION DISQUES & MISES À JOUR -->
+  <div class="grid">
+    <div class="card">
+      <h3>Mises à jour Windows (PSWindowsUpdate)</h3>
+      <div class="cmd-block">
+        <span class="comment"># Installer le module</span><br>
+        <span class="cmd">Install-Module</span> -Name PSWindowsUpdate -Force<br>
+        <span class="cmd">Import-Module</span> PSWindowsUpdate
+      </div>
+      <div class="cmd-block">
+        <span class="cmd">Get-WindowsUpdate</span> <span class="comment">— lister les MàJ disponibles</span><br>
+        <span class="cmd">Install-WindowsUpdate</span> -AcceptAll -AutoReboot<br>
+        <span class="cmd">Get-WUHistory</span> <span class="comment">— historique des MàJ installées</span><br>
+        <span class="cmd">Get-Hotfix</span> <span class="comment">— correctifs installés (natif)</span><br>
+        <span class="cmd">Get-Hotfix</span> -Id KB5034441
+      </div>
+      <hr class="sep">
+      <h3>Gestion des certificats</h3>
+      <div class="cmd-block">
+        <span class="comment"># Lecteurs PS pour les certificats</span><br>
+        <span class="comment"># Cert:\LocalMachine\My — perso machine</span><br>
+        <span class="comment"># Cert:\CurrentUser\My  — perso utilisateur</span><br>
+        <span class="cmd">Get-ChildItem</span> Cert:\LocalMachine\My<br>
+        <span class="cmd">Get-ChildItem</span> Cert:\LocalMachine\Root <span class="comment">— autorités racines</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Exporter un certificat</span><br>
+        <span class="keyword">$cert</span> = <span class="cmd">Get-Item</span> <span style="color:var(--accent6)">"Cert:\LocalMachine\My\THUMBPRINT"</span><br>
+        <span class="cmd">Export-Certificate</span> -Cert <span class="keyword">$cert</span> -FilePath <span style="color:var(--accent6)">"C:\cert.cer"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Profil PowerShell & personnalisation</h3>
+      <div class="cmd-block">
+        <span class="comment"># Fichiers de profil (chargés au démarrage PS)</span><br>
+        <span class="keyword">$PROFILE</span> <span class="comment">— profil utilisateur courant</span><br>
+        <span class="cmd">notepad</span> <span class="keyword">$PROFILE</span> <span class="comment">— éditer le profil</span><br>
+        <span class="comment"># Niveaux :</span><br>
+        <span class="comment"># AllUsersAllHosts     → \Windows\System32\WindowsPowerShell\v1.0\profile.ps1</span><br>
+        <span class="comment"># CurrentUserAllHosts  → \Documents\PowerShell\profile.ps1</span>
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Exemple de profil utile</span><br>
+        <span class="comment"># Alias personnalisés</span><br>
+        <span class="cmd">Set-Alias</span> ll <span class="cmd">Get-ChildItem</span><br>
+        <span class="cmd">Set-Alias</span> grep <span class="cmd">Select-String</span><br>
+        <span class="comment"># Fonction rapide</span><br>
+        <span class="keyword">function</span> <span class="cmd">admin</span> { <span class="cmd">Start-Process</span> powershell -Verb RunAs }
+      </div>
+      <hr class="sep">
+      <h3>Gestion des modules & NuGet</h3>
+      <div class="cmd-block">
+        <span class="cmd">Find-Module</span> -Name <span style="color:var(--accent6)">"*AD*"</span> <span class="comment">— chercher sur PSGallery</span><br>
+        <span class="cmd">Install-Module</span> -Name Az -Scope AllUsers<br>
+        <span class="cmd">Update-Module</span> -Name Az<br>
+        <span class="cmd">Uninstall-Module</span> -Name Az<br>
+        <span class="cmd">Get-InstalledModule</span><br>
+        <span class="cmd">Get-Module</span> -ListAvailable | <span class="cmd">Where-Object</span> { <span class="keyword">$_.Name</span> -like <span style="color:var(--accent6)">"*AD*"</span> }
+      </div>
+      <div class="cmd-block">
+        <span class="comment"># Version et mise à jour PS</span><br>
+        <span class="keyword">$PSVersionTable</span> <span class="comment">— version de PowerShell</span><br>
+        <span class="comment"># PS 5.1 = Windows PowerShell (intégré)</span><br>
+        <span class="comment"># PS 7.x = PowerShell Core (multiplateforme)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS COMPLETS TSSR -->
+  <div class="card" style="margin-bottom:1.5rem">
+    <h3>🎯 Scripts complets niveau TSSR — À connaître</h3>
+    <div class="two-col">
+      <div>
+        <div class="cmd-block">
+          <span class="comment">## AUDIT COMPLET D'UN POSTE</span><br>
+          <span class="keyword">$rapport</span> = @()<br>
+          <span class="keyword">$pc</span> = <span class="cmd">Get-CimInstance</span> Win32_ComputerSystem<br>
+          <span class="keyword">$os</span> = <span class="cmd">Get-CimInstance</span> Win32_OperatingSystem<br>
+          <span class="keyword">$disk</span> = <span class="cmd">Get-CimInstance</span> Win32_LogicalDisk -Filter <span style="color:var(--accent6)">"DriveType=3"</span><br>
+          <br>
+          <span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Nom : $($pc.Name)"</span><br>
+          <span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"OS  : $($os.Caption)"</span><br>
+          <span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"RAM : $([math]::Round($pc.TotalPhysicalMemory/1GB,2)) Go"</span><br>
+          <span class="keyword">foreach</span> (<span class="keyword">$d</span> <span class="keyword">in</span> <span class="keyword">$disk</span>) {<br>
+          &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"$($d.DeviceID) Libre: $([math]::Round($d.FreeSpace/1GB,2))Go / $([math]::Round($d.Size/1GB,2))Go"</span><br>
+          }
+        </div>
+        <div class="cmd-block">
+          <span class="comment">## VÉRIFIER CONNECTIVITÉ LISTE DE SERVEURS</span><br>
+          <span class="keyword">$serveurs</span> = @(<span style="color:var(--accent6)">"SRV-DC01"</span>,<span style="color:var(--accent6)">"SRV-FILE"</span>,<span style="color:var(--accent6)">"SRV-PRINT"</span>)<br>
+          <span class="keyword">foreach</span> (<span class="keyword">$s</span> <span class="keyword">in</span> <span class="keyword">$serveurs</span>) {<br>
+          &nbsp;&nbsp;<span class="keyword">$ping</span> = <span class="cmd">Test-Connection</span> <span class="keyword">$s</span> -Count 1 -Quiet<br>
+          &nbsp;&nbsp;<span class="keyword">$rdp</span> = (<span class="cmd">Test-NetConnection</span> <span class="keyword">$s</span> -Port 3389).TcpTestSucceeded<br>
+          &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"$s | Ping: $ping | RDP: $rdp"</span><br>
+          } | <span class="cmd">Export-Csv</span> <span style="color:var(--accent6)">"etat_serveurs.csv"</span>
+        </div>
+      </div>
+      <div>
+        <div class="cmd-block">
+          <span class="comment">## RÉINITIALISER MDP + DÉVERROUILLER COMPTES AD</span><br>
+          <span class="keyword">$mdp</span> = <span class="cmd">ConvertTo-SecureString</span> <span style="color:var(--accent6)">"Temp@2025!"</span> -AsPlainText -Force<br>
+          <span class="cmd">Search-ADAccount</span> -LockedOut | <span class="cmd">ForEach-Object</span> {<br>
+          &nbsp;&nbsp;<span class="cmd">Unlock-ADAccount</span> -Identity <span class="keyword">$_.SamAccountName</span><br>
+          &nbsp;&nbsp;<span class="cmd">Set-ADAccountPassword</span> -Identity <span class="keyword">$_.SamAccountName</span> -NewPassword <span class="keyword">$mdp</span> -Reset<br>
+          &nbsp;&nbsp;<span class="cmd">Set-ADUser</span> -Identity <span class="keyword">$_.SamAccountName</span> -ChangePasswordAtLogon <span class="keyword">$true</span><br>
+          &nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Déverrouillé : $($_.SamAccountName)"</span><br>
+          }
+        </div>
+        <div class="cmd-block">
+          <span class="comment">## DÉPLOIEMENT LOGICIEL SILENCIEUX</span><br>
+          <span class="keyword">$pcs</span> = <span class="cmd">Get-ADComputer</span> -Filter * -SearchBase <span style="color:var(--accent6)">"OU=PCs,DC=dom,DC=local"</span><br>
+          <span class="cmd">Invoke-Command</span> -ComputerName <span class="keyword">$pcs</span>.Name -ScriptBlock {<br>
+          &nbsp;&nbsp;<span class="keyword">$installer</span> = <span style="color:var(--accent6)">"\\SRV-FILE\Deploy\setup.msi"</span><br>
+          &nbsp;&nbsp;<span class="keyword">if</span> (<span class="cmd">Test-Path</span> <span class="keyword">$installer</span>) {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">Start-Process</span> msiexec -ArgumentList <span style="color:var(--accent6)">"/i $installer /qn /norestart"</span> -Wait<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">Write-Host</span> <span style="color:var(--accent6)">"Installé sur $env:COMPUTERNAME"</span><br>
+          &nbsp;&nbsp;}<br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <!-- ====== SECU ====== -->
 <div class="section" id="secu">
   <div class="section-title"><h2>Sécurité</h2></div>
@@ -1948,7 +2379,7 @@
 </div><!-- end .content -->
 
 <script>
-const sections = ['osi','ports','ip','routage','cisco','ad','gpo','windows','linux','disques','scripting','secu','virt','itil','recap'];
+const sections = ['osi','ports','ip','routage','cisco','ad','gpo','windows','linux','disques','scripting','powershell','secu','virt','itil','recap'];
 function show(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
